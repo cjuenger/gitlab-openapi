@@ -40,9 +40,6 @@ properties:
     $ref: "./user.yaml"
   type:
     type: string
-  assignee:
-    $ref: "./user.yaml"
-    nullable: true
   user_notes_count:
     type: integer
     minimum: 0
