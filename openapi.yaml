@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: GitLab REST API V4
+  description: REST API for GitLab
+  version: 0.0.1
+servers:
+  - url: https://gitlab.com/api
+    description: Base REST URI of API version 4 to 'gitlab.com'.
+
+paths:
+
+  # PROJECT
+  /v4/projects/{id}/issues:
+    $ref: "./v4/project/issues.yaml"
+  /v4/projects/{id}/issues/{iid}:
+    $ref: "./v4/project/issues_iid.yaml"
+  # /v4/projects/{id}/issues/{iid}/move:
+  #   $ref: "./v4/project/issues_iid_move.yaml"
+  # /v4/projects/{id}/issues/{iid}/subscribe
+  # /v4/projects/{id}/issues/{iid}/unsubscribe
+  # /v4/projects/{id}/issues/{iid}/todo
+  # /v4/projects/{id}/issues/{iid}/notes
+  # /v4/projects/{id}/issues/{iid}/time_estimate
+  # /v4/projects/{id}/issues/{iid}/reset_time_estimate
+  # /v4/projects/{id}/issues/{iid}/add_spent_time
+  # /v4/projects/{id}/issues/{iid}/reset_spent_time
+  # /v4/projects/{id}/issues/{iid}/time_stats
+  # /v4/projects/{id}/issues/{iid}/related_merge_requests
+  # /v4/projects/{id}/issues/{iid}/closed_by
+  # /v4/projects/{id}/issues/{iid}/participants
+  # /v4/projects/{id}/issues/{iid}/user_agent_detail
+  # /v4/projects/{id}/issues/{iid}/metric_images
+  # /v4/projects/{id}/issues/{iid}/metric_images
+  # /v4/projects/{id}/issues/{iid}/metric_images/:image_id
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
+security:
+  - bearerAuth: []

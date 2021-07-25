@@ -1,0 +1,25 @@
+# /v4/projects/{id}/issues/{iid}
+
+get:
+  tags:
+    - Project
+  operationId: listProjectIssues
+  summary: Returns a list of project related issues.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+      type : string
+    - name: iid
+      in: path
+      required: true
+      description: The ID of the related issue.
+      type : integer
+  responses:
+    '200':
+      description: A list of project related issues.
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/issue.yaml"

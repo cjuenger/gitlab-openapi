@@ -1,0 +1,16 @@
+type: object
+properties:
+  state:
+    type: string
+  web_url:
+    type: string
+    format: uri
+  avatar_url:
+    type: string
+    nullable: true
+  username:
+    type: string
+  id:
+    type: integer
+  name:
+    type: string

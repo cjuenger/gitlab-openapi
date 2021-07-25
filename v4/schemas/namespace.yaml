@@ -1,0 +1,21 @@
+type: object
+properties:
+id: 
+    type: integer
+name: 
+    type: string
+path: 
+    type: string
+kind: 
+    type: string
+full_path: 
+    type: string
+parent_id: null
+    type: integer
+    nullable: true
+avatar_url: 
+    type: string
+    format: uri
+web_url":
+    type: string
+    format: uri
