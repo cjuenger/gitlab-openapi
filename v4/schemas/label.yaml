@@ -1,0 +1,14 @@
+type: object
+properties:
+  id:
+    type: integer
+  name: 
+    type: string
+  color:
+    type: string
+  description:
+    type: string
+  description_html:
+    type: string
+  text_color:
+    type: string 

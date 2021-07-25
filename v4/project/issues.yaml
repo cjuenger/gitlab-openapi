@@ -3,18 +3,212 @@
 get:
   tags:
     - Project
-  operationId: listProjectIssues
+  operationId: getProjectIssues
   summary: Returns a list of project related issues.
   parameters:
     - name: id
       in: path
       required: true
-      description: The ID or URL-encoded path of the project owned by the authenticated user.
       type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: assignee_id
+      in: query      
+      schema:
+        type: integer
+      description: Returns issues assigned to a specific `assignee_id`.
+    - name: assignee_username
+      in: query      
+      schema:
+        type: array
+        items: 
+          type: string
+      description: Returns issues assigned to a specific `assignee_username`.
+    - name: author_id
+      in: query      
+      schema:
+        type: integer
+      description: Returns issues that have been created by the author with the given `author_id`.
+    - name: author_username
+      in: query      
+      schema:
+        type: string
+      description: Returns issues that have been created by the author with the given `author_username`.
+    - name: confidential
+      in: query      
+      schema:
+        type: boolean
+      description: Filters either confidential or public issues.
+    - name: created_after
+      in: query      
+      schema:
+        type: string
+        format: date-time
+      description: Return issues created on or after the given time. 
+    - name: created_before
+      in: query      
+      schema:
+        type: string
+        format: date-time
+      description: Return issues created on or before the given time. 
+    - name: due_date
+      in: query      
+      schema:
+        $ref: "../enums/dueDate.yaml"
+      description: >
+        Return issues that have no due date, are overdue, or whose due date 
+        is this week, this month, or between two weeks ago and next month. 
+        Accepts: `0` (no due date), `overdue`, `week`, `month`, `next_month_and_previous_two_weeks`.
+    - name: iids
+      in: query      
+      schema:
+        type: array
+        items:
+          type: integer
+      description: Return the issues of the given `iids`.
+    - name: in
+      in: query      
+      schema:
+        type: string
+      description: >
+        Allows to modify the scope of the search by specifying the elements to search in. 
+        `title`, `description`, or a string joining them with comma. Default is `title,description`
+    - name: issue_type
+      in: query      
+      schema:
+        type: string
+      description: Filters for a specific type of issue.
+    - name: iteration_id 
+      in: query      
+      schema:
+        type: string
+      description: >
+        Return issues assigned to the given iteration ID. 
+        `None` returns issues that do not belong to an iteration. 
+        `Any` returns issues that belong to an iteration. 
+        Mutually exclusive with `iteration_title`. (Introduced in GitLab 13.6)
+        <br>
+        **NOTE: Available in GitLab Premium self-managed, GitLab Premium SaaS, and higher tiers.**
+    - name: iteration_title 
+      in: query      
+      schema:
+        type: string
+      description: >
+        Return issues assigned to the iteration with the given title. 
+        Similar to `iteration_id` and mutually exclusive with `iteration_id`. (Introduced in GitLab 13.6)
+        <br>
+        **NOTE: Available in GitLab Premium self-managed, GitLab Premium SaaS, and higher tiers.**
+    - name: labels
+      in: query      
+      schema:
+        oneOf:
+          - type: array
+            items:
+              type: string
+          - $ref: "../schemas/label.yaml"                    
+      description: > 
+        Comma-separated list of label names, issues must have all labels to be returned. 
+        `None` lists all issues with no labels. 
+        `Any` lists all issues with at least one label.
+    - name: milestone
+      in: query      
+      schema:
+        type: string
+      description: >
+        The milestone title. 
+        `None` lists all issues with no milestone. 
+        `Any` lists all issues that have an assigned milestone. 
+    - name: my_reaction_emoji
+      in: query      
+      schema:
+        type: string
+      description: >
+        Return issues reacted by the authenticated user by the given emoji. 
+        `None` returns issues not given a reaction. 
+        `Any` returns issues given at least one reaction. (Introduced in GitLab 10.0)
+    - name: non_archived
+      in: query      
+      schema:
+        type: boolean
+      description: >
+        Return issues only from non-archived projects. 
+        If `false`, the response returns issues from both archived and non-archived projects. 
+        Default is `true`. (Introduced in GitLab 13.0)
+    # TODO: 20210725 cjuenger: Specify `not` property as soon as I know how!
+    # - name: not
+    #   in: query      
+    #   schema:
+    #     type: string
+    #     format: 
+    #   description: 
+    - name: order_by
+      in: query      
+      schema:
+        $ref: "../enums/orderBy.yaml"
+      description: >
+        Return issues ordered by `created_at`, `updated_at`, `priority`, `due_date`, `relative_position`, 
+        `label_priority`, `milestone_due`, `popularity`, `weight` fields. <br>
+        Default is `created_at`
+    - name: scope
+      in: query      
+      schema:
+        $ref: "../enums/scope.yaml"
+      description: >
+        Return issues for the given scope: `created_by_me`, `assigned_to_me` or `all`. <br>
+        Defaults to `created_by_me`
+    - name: search
+      in: query      
+      schema: 
+        type: string
+      description: Search issues against their `title` and `description`
+    - name: sort
+      in: query      
+      schema:
+        $ref: "../enums/sortingOrder.yaml"
+      description: Return issues sorted in `asc` or `desc` order. Default is `desc`
+    - name: state
+      in: query      
+      schema:
+        $ref: "../enums/state.yaml"
+      description: Return `all` issues or just those that are `opened` or `closed`
+    - name: updated_after
+      in: query      
+      schema:
+        type: string
+        format: date-time
+      description: > 
+        Return issues updated on or after the given time. <br>
+        Expected in ISO 8601 format (`2019-03-15T08:00:00Z`) 
+    - name: updated_before
+      in: query      
+      schema:
+        type: string
+        fomrat: date-time
+      description: >
+        Return issues updated on or before the given time. 
+        Expected in ISO 8601 format (`2019-03-15T08:00:00Z`) 
+    - name: weight
+      in: query      
+      schema:
+        type: integer
+      description: >
+        Return issues with the specified `weight`. 
+        `None` returns issues with no weight assigned. 
+        `Any` returns issues with a weight assigned. 
+    - name: with_labels_details
+      in: query      
+      schema:
+        type: boolean
+      description: >
+        If `true`, the response returns more details for each label in labels field: 
+        `:name`, `:color`, `:description`, `:description_html`, `:text_color`. 
+        Default is `false`. <br>
+        The description_html attribute was introduced in GitLab 12.7
   responses:
     '200':
       description: A list of project related issues.
       content:
         application/json:
           schema:
-            $ref: "../schemas/issue.yaml"
+            type: array
+            items:
+              $ref: "../schemas/issue.yaml"

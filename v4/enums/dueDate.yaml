@@ -1,0 +1,7 @@
+type: string
+enum:
+  - 0
+  - overdue
+  - week
+  - month
+  - next_month_and_previous_two_weeks
