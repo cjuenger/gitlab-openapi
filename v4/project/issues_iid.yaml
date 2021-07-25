@@ -3,7 +3,7 @@
 get:
   tags:
     - Project
-  operationId: listProjectIssues
+  operationId: getProjectIssue
   summary: Returns a list of project related issues.
   parameters:
     - name: id
