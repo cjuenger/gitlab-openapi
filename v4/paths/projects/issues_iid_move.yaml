@@ -1,0 +1,38 @@
+# /v4/projects/{id}/issues/{iid}/move
+
+post:
+  tags:
+    - Project
+  operationId: moveIssueToProject
+  summary: Moves a project issue to a different project.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+    - name: to_project_id
+      in: query
+      required: true
+      schema:
+        type: integer
+      description: The ID of the new project 
+      
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"
