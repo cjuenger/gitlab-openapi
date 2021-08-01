@@ -17,6 +17,8 @@ paths:
     $ref: "./v4/paths/projects/issues.yaml"
   /v4/projects/{id}/issues/{iid}:
     $ref: "./v4/paths/projects/issues_iid.yaml"
+  /v4/projects/{id}/issues/{iid}/reorder:
+    $ref: "./v4/paths/projects/issues_iid_reorder.yaml"
 
 components:
   securitySchemes:

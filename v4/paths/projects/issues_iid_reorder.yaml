@@ -1,0 +1,44 @@
+# /v4/projects/{id}/issues/{iid}/reorder
+
+put:
+  tags:
+    - Project
+  operationId: reorderProjectIssue
+  summary: Reorders an issue.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+    - name: move_after_id
+      in: query
+      schema:
+        type: integer
+      description: The ID of a project’s issue, after this issue shall be placed.
+    - name: move_before_id
+      in: query
+      schema:
+        type: integer
+      description: The ID of a project’s issue, before this issue shall be placed.
+      
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"
+    '422':
+      $ref: "../../responses/unprocessableEntity.yaml"

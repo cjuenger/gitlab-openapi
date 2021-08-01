@@ -25,6 +25,8 @@ get:
         application/json:
           schema:
             $ref: "../../schemas/issue.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"
 
 put:
   tags:
@@ -60,6 +62,8 @@ put:
             $ref: "../../schemas/issue.yaml"
     '400':
       $ref: "../../responses/badRequest.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"
     '409':
       $ref: "../../responses/conflict.yaml"
 
