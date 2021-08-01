@@ -9,7 +9,8 @@ get:
     - name: id
       in: path
       required: true
-      type : string
+      schema:
+        type : string
       description: The ID or URL-encoded path of the project owned by the authenticated user.
     - name: assignee_id
       in: query      
@@ -53,7 +54,7 @@ get:
     - name: due_date
       in: query      
       schema:
-        $ref: "../enums/dueDate.yaml"
+        $ref: "../../enums/dueDate.yaml"
       description: >
         Return issues that have no due date, are overdue, or whose due date 
         is this week, this month, or between two weeks ago and next month. 
@@ -104,7 +105,7 @@ get:
           - type: array
             items:
               type: string
-          - $ref: "../schemas/label.yaml"                    
+          - $ref: "../../schemas/label.yaml"                    
       description: > 
         Comma-separated list of label names, issues must have all labels to be returned. 
         `None` lists all issues with no labels. 
@@ -143,7 +144,7 @@ get:
     - name: order_by
       in: query      
       schema:
-        $ref: "../enums/orderBy.yaml"
+        $ref: "../../enums/orderBy.yaml"
       description: >
         Return issues ordered by `created_at`, `updated_at`, `priority`, `due_date`, `relative_position`, 
         `label_priority`, `milestone_due`, `popularity`, `weight` fields. <br>
@@ -151,7 +152,7 @@ get:
     - name: scope
       in: query      
       schema:
-        $ref: "../enums/scope.yaml"
+        $ref: "../../enums/scope.yaml"
       description: >
         Return issues for the given scope: `created_by_me`, `assigned_to_me` or `all`. <br>
         Defaults to `created_by_me`
@@ -163,12 +164,12 @@ get:
     - name: sort
       in: query      
       schema:
-        $ref: "../enums/sortingOrder.yaml"
+        $ref: "../../enums/sortingOrder.yaml"
       description: Return issues sorted in `asc` or `desc` order. Default is `desc`
     - name: state
       in: query      
       schema:
-        $ref: "../enums/state.yaml"
+        $ref: "../../enums/state.yaml"
       description: Return `all` issues or just those that are `opened` or `closed`
     - name: updated_after
       in: query      
@@ -211,4 +212,36 @@ get:
           schema:
             type: array
             items:
-              $ref: "../schemas/issue.yaml"
+              $ref: "../../schemas/issue.yaml"
+
+post:
+  tags:
+    - Project
+  operationId: createNewProjectIssue
+  summary: Returns a list of project related issues.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+  requestBody:
+    description: Details of the issue to create.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/newIssue.yaml"
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+    '409':
+      $ref: "../../responses/conflict.yaml"
+            

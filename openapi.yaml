@@ -14,16 +14,16 @@ paths:
 
   # PROJECT
   /v4/projects/{id}/issues:
-    $ref: "./v4/project/issues.yaml"
+    $ref: "./v4/paths/projects/issues.yaml"
   /v4/projects/{id}/issues/{iid}:
-    $ref: "./v4/project/issues_iid.yaml"
+    $ref: "./v4/paths/projects/issues_iid.yaml"
 
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT  
+      bearerFormat: JWT
 
 security:
   - bearerAuth: []

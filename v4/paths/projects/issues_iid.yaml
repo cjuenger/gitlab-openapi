@@ -1,0 +1,64 @@
+# /v4/projects/{id}/issues/{iid}
+
+get:
+  tags:
+    - Project
+  operationId: getProjectIssue
+  summary: Returns a specific project issues.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+  responses:
+    '200':
+      description: A list of project related issues.
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+
+put:
+  tags:
+    - Project
+  operationId: editIssue
+  summary: Edits an existing issue.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+  requestBody:
+    description: Details of the issue to create.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/editIssue.yaml"
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+    '409':
+      $ref: "../../responses/conflict.yaml"
