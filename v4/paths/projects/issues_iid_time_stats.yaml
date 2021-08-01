@@ -1,0 +1,30 @@
+# /v4/projects/{id}/issues/{iid}/time_stats
+
+get:
+  tags:
+    - Project
+  operationId: getTimeStatsOfProjectIssue
+  summary: >
+    Retrieves time status of a specific project issue. 
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/timeStats.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"

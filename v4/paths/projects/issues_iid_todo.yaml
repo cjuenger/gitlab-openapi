@@ -1,0 +1,36 @@
+# /v4/projects/{id}/issues/{iid}/todo
+
+post:
+  tags:
+    - Project
+  operationId: createTodoItemForProjectIssue
+  summary: >
+    Manually creates a to-do item for the current user on an issue. 
+    If there already exists a to-do item for the user on that issue, status code 304 is returned. 
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+      
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '304':
+      description: > 
+        Not Modified <br>
+        Returned if the a to-do item already exsists for this issue, for the user user.
+    '404':
+      $ref: "../../responses/notFound.yaml"
