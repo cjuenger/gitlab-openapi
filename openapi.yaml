@@ -23,6 +23,8 @@ paths:
     $ref: "./v4/paths/projects/issues_iid_move.yaml"
   /v4/projects/{id}/issues/{iid}/subscribe:
     $ref: "./v4/paths/projects/issues_iid_subscribe.yaml"
+  /v4/projects/{id}/issues/{iid}/unsubscribe:
+    $ref: "./v4/paths/projects/issues_iid_unsubscribe.yaml"
 
 components:
   securitySchemes:

@@ -1,0 +1,36 @@
+# /v4/projects/{id}/issues/{iid}/unsubscribe
+
+post:
+  tags:
+    - Project
+  operationId: unsubscribeFromProjectIssue
+  summary: >
+    Unsubscribes the authenticated user from the issue to not receive notifications from it. 
+    If the user is not subscribed to the issue, the status code 304 is returned. 
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+      
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '304':
+      description: > 
+        Not Modified <br>
+        Returned if the user is already unsubscribed from the issue.
+    '404':
+      $ref: "../../responses/notFound.yaml"
