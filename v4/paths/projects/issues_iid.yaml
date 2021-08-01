@@ -29,7 +29,7 @@ get:
 put:
   tags:
     - Project
-  operationId: editIssue
+  operationId: updateProjectIssue
   summary: Edits an existing issue.
   parameters:
     - name: id
@@ -62,3 +62,27 @@ put:
       $ref: "../../responses/badRequest.yaml"
     '409':
       $ref: "../../responses/conflict.yaml"
+
+delete:
+  tags:
+    - Project
+  operationId: deleteProjectIssue
+  summary: Deletes an existing issue.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+  responses:
+    '204':
+      description: No Content
+    '404':
+      $ref: "../../responses/notFound.yaml"
