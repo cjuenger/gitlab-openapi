@@ -101,11 +101,9 @@ get:
     - name: labels
       in: query      
       schema:
-        oneOf:
-          - type: array
-            items:
-              type: string
-          - $ref: "../../schemas/label.yaml"                    
+        type: array
+        items:
+          type: string                   
       description: > 
         Comma-separated list of label names, issues must have all labels to be returned. 
         `None` lists all issues with no labels. 
