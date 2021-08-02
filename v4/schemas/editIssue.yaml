@@ -6,7 +6,7 @@ properties:
       type: string
   assignee_ids:
     type: array
-    itmes:
+    items:
       type: integer
   confidential:
     type: boolean

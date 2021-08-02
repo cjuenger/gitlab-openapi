@@ -47,7 +47,7 @@ put:
         type : integer
       description: The ID of the related issue.
   requestBody:
-    description: Details of the issue to create.
+    description: Details of the issue to update.
     required: true
     content:
       application/json:
