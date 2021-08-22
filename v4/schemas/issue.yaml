@@ -12,7 +12,7 @@ properties:
     type: string
     nullable: true
   state: 
-    type: string
+    $ref: "../enums/state.yaml"
   created_at:
     type: string
     format: date-time

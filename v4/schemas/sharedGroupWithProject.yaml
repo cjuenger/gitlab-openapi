@@ -1,0 +1,14 @@
+type: object
+properties:
+  group_id:
+    type: integer
+  group_name:
+    type: string
+  group_full_path:
+    type: string
+  group_access_level:
+    type: integer
+  expires_at:
+    type: string
+    format: date-time
+    nullable: true

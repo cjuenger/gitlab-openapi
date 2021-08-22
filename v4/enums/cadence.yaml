@@ -1,0 +1,7 @@
+type: string
+enum:
+  - 1d
+  - 7d
+  - 14d
+  - 1month
+  - 3month
