@@ -13,8 +13,8 @@ servers:
 paths:
 
   # PROJECT
-  # /v4/projects:
-  #   $ref: "./v4/paths/projects/projects.yaml"
+  /v4/projects:
+    $ref: "./v4/paths/projects/projects.yaml"
   # /v4/projects/{id}:
   #   $ref: "./v4/paths/projects/projects_id.yaml"
   /v4/projects/{id}/issues:
