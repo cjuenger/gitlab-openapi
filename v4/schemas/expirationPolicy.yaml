@@ -1,14 +1,14 @@
 type: object
 properties:
   cadence:
-    $ref: "../../enums/cadence.yaml"
+    $ref: "../enums/cadence.yaml"
   enabled:
     type: boolean
   keep_n:
     description: Keep n tags per image name
     type: integer
   older_than:
-    $ref: "../../enums/olderThan.yaml"
+    $ref: "../enums/olderThan.yaml"
   name_regex:
     type: string
   name_regex_keep:

@@ -61,7 +61,7 @@ properties:
   archived":
     type: boolean
   visibility:
-    $ref: "../../enums/visibility.yaml"
+    $ref: "../enums/visibility.yaml"
   owner: 
     $ref: "./user.yaml"
   resolve_outdated_diff_discussions:
@@ -129,7 +129,7 @@ properties:
   creator_id:
     type: integer
   import_status:
-    $ref: "../../enums/importerStatus.yaml"
+    $ref: "../enums/importerStatus.yaml"
   import_error:
     type: string
     nullable: true
@@ -146,11 +146,11 @@ properties:
   public_jobs:
     type: boolean
   build_git_strategy:
-    $ref: "../../enums/buildGitStrategy.yaml"
+    $ref: "../enums/buildGitStrategy.yaml"
   build_timeout:
     type: integer
   auto_cancel_pending_pipelines:
-    $ref: "../../enums/enablement.yaml"
+    $ref: "../enums/enablement.yaml"
   build_coverage_regex:
     type: string
     nullable: true
@@ -176,16 +176,16 @@ properties:
   printing_merge_request_link_enabled:
     type: boolean
   merge_method:
-    $ref: "../../enums/mergeMethod.yaml"
-  squash_option: "default_off",
-    $ref: "../../enums/squashOption.yaml"
+    $ref: "../enums/mergeMethod.yaml"
+  squash_option:
+    $ref: "../enums/squashOption.yaml"
   suggestion_commit_message:
     type: string
     nullable: true
   auto_devops_enabled:
     type: boolean
-  auto_devops_deploy_strategy: "continuous",
-    $ref: "../../enums/autoDevopsDeployStrategy.yaml"
+  auto_devops_deploy_strategy:
+    $ref: "../enums/autoDevopsDeployStrategy.yaml"
   autoclose_referenced_issues:
     type: boolean
   keep_latest_artifact:
@@ -196,7 +196,7 @@ properties:
     type: boolean
   security_and_compliance_enabled:
     type: boolean
-  compliance_frameworks: [],
+  compliance_frameworks:
     type: array
     items:
       type: string
