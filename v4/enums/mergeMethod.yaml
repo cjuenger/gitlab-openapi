@@ -1,5 +1,5 @@
 type: string
-enum
+enum:
   - merge
   - rebase_merge
   - ff

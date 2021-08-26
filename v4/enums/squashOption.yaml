@@ -1,5 +1,5 @@
 type: string
-enum
+enum:
   - never
   - always
   - default_on
