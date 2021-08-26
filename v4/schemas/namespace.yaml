@@ -1,21 +1,21 @@
 type: object
 properties:
-id: 
+  id: 
     type: integer
-name: 
+  name: 
     type: string
-path: 
+  path: 
     type: string
-kind: 
+  kind: 
     type: string
-full_path: 
+  full_path: 
     type: string
-parent_id: null
+  parent_id:
     type: integer
     nullable: true
-avatar_url: 
+  avatar_url: 
     type: string
     format: uri
-web_url":
+  web_url:
     type: string
     format: uri
