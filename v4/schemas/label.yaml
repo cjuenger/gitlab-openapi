@@ -11,4 +11,11 @@ properties:
   description_html:
     type: string
   text_color:
-    type: string 
+    type: string
+  subscribed:
+    type: boolean
+  priority: 
+    type: integer
+    nullable: true
+  is_project_label:
+    type: boolean
