@@ -1,0 +1,6 @@
+type: string
+enum:
+  - never
+  - always
+  - default_on
+  - default_off

@@ -1,0 +1,7 @@
+type: object
+properties:
+  project_access: 
+    $ref: "./memberAccess.yaml"
+  group_access:
+    $ref: "./memberAccess.yaml"
+    nullable: true

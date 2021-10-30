@@ -1,0 +1,36 @@
+# /v4/projects/{id}:
+  
+get:
+  tags:
+    - Project
+  operationId: getProject
+  summary: Returns a specific project.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: license
+      in: query      
+      schema:
+        type: boolean
+      description: Include project license data.
+    - name: statistics
+      in: query      
+      schema:
+        type: boolean
+      description: Include project statistics. Only available to Reporter or higher level role members.
+    - name: with_custom_attributes
+      in: query      
+      schema:
+        type: boolean
+      description: Include custom attributes in response. (*admins only!*)
+  responses:
+      '200':
+        description: A specific project.
+        content:
+          application/json:
+            schema:
+              $ref: "../../schemas/project.yaml"

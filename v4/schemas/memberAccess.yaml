@@ -1,0 +1,6 @@
+type: object
+properties:
+  access_level:
+    type: integer
+  notification_level:
+    type: integer
