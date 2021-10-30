@@ -1,0 +1,91 @@
+# /v4/projects/{id}/labels
+  
+get:
+  tags:
+    - Project
+  operationId: getProjectLabels
+  summary: Returns a list of project related labels.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: with_counts
+      in: query
+      schema:
+        type: boolean
+      description: Whether or not to include issue and merge request counts. Defaults to false.
+    - name: include_ancestor_groups
+      in: query
+      schema:
+        type: boolean
+      description: Include ancestor groups. Defaults to true.
+    - name: search
+      in: query
+      schema: 
+        type: boolean
+      description: Keyword to filter labels by.
+
+  responses:
+    '200':
+      description: A list of project related labels.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/label.yaml"
+
+post:
+  tags:
+    - Project
+  operationId: createNewProjectLabel
+  summary: Returns the created project label.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: name
+      in: query
+      required: true
+      schema:
+        type: string
+      description: The name of the label 
+    - name: color
+      in: query
+      required: true
+      schema:
+        type: string
+      description: > 
+        The color of the label given in 6-digit hex notation with leading ‘#’ sign (for example, #FFAABB) or one of the CSS color names
+    - name: description
+      in: query
+      schema:
+        type: string
+      description: The description of the label.
+    - name: priority
+      in: query
+      schema:
+        type: integer
+        nullable: true
+      description: >
+        The priority of the label. 
+        Must be greater or equal than zero or null to remove the priority. 
+
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/issue.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+    '409':
+      $ref: "../../responses/conflict.yaml"
+            

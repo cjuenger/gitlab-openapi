@@ -1,0 +1,94 @@
+# /v4/projects/{id}/labels/{iid}
+
+get:
+  tags:
+    - Project
+  operationId: getProjectLabel
+  summary: Returns a specific project label.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related label.
+    - name: include_ancestor_groups
+      in: query
+      schema:
+        type: boolean
+      description: Include ancestor groups. Defaults to true.
+  responses:
+    '200':
+      description: A specific project label.
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/label.yaml"
+    '404':
+      $ref: "../../responses/notFound.yaml"
+
+put:
+  tags:
+    - Project
+  operationId: updateProjectLabel
+  summary: Edits an existing project label.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+
+  requestBody:
+    description: Details of the issue to update.
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/editLabel.yaml"
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/label.yaml"
+    '400':
+      $ref: "../../responses/badRequest.yaml"
+
+delete:
+  tags:
+    - Project
+  operationId: deleteProjectLabel
+  summary: Deletes an existing label.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : integer
+      description: The ID of the related issue.
+  responses:
+    '204':
+      description: No Content
+    '404':
+      $ref: "../../responses/notFound.yaml"
