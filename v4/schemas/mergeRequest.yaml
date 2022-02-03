@@ -1,0 +1,117 @@
+type: object
+properties:
+  id:
+    type: integer
+  iid:
+    type: integer
+  project_id: 
+    type: integer
+  title:
+    type: string
+  description:
+    type: string
+    nullable: true
+  state:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  updated_at:
+    type: string
+    format: date-time
+  merged_by:
+    $ref: "./user.yaml" 
+    nullable: true
+  merge_user:
+    $ref: "./user.yaml" 
+    nullable: true
+  merged_at:
+    type: string
+    format: date-time
+    nullable: true
+  closed_by:
+    type: string
+    format: date-time
+    nullable: true
+  closed_at:
+    type: string
+    format: date-time
+    nullable: true
+  target_branch: 
+    type: string
+  source_branch: 
+    type: string
+  user_notes_count:
+    type: integer
+  upvotes:
+    type: integer
+  downvotes: 
+    type: integer
+  author:
+    $ref: "./user.yaml"
+  assignees:
+    type: arry
+    items: 
+      $ref: "./user.yaml"
+  assignee:
+    $ref: "./user.yaml"
+    nullable: true
+  reviewers: 
+    type: array
+    items:
+      $ref: "./user.yaml"
+  source_project_id: 
+    type: integer
+  target_project_id: 
+    type: integer
+  labels: 
+    type: array
+    items:
+      $ref: "./label.yaml"
+  draft: 
+    type: boolean
+  work_in_progress: 
+    type: boolean
+  milestone:
+    $ref: "./milestone.yaml"
+  merge_when_pipeline_succeeds: 
+    type: boolean
+  merge_status: 
+    $ref: "../enums/mergeStatus.yaml"
+  sha: 
+    type: string
+  merge_commit_sha: 
+    type: string
+    nullable: true
+  squash_commit_sha: 
+    type: string
+    nullable: true
+  discussion_locked: 
+    type: booleane
+    nullable: true
+  should_remove_source_branch: 
+    type: boolean
+    nullable: true
+  force_remove_source_branch: 
+    type: boolean
+  reference: 
+    type: string
+  references:
+    $ref: "./references.yaml"
+  web_url:
+    type: string
+  time_stats:
+    $ref: "./timeStats.yaml"
+  squash:
+    type: boolean
+  task_completion_status:
+    $ref: "./taskCompletionStatus.yaml"
+  has_conflicts:
+    type: boolean
+  blocking_discussions_resolved:
+    type: boolean
+  approvals_before_merge:
+    type: integer
+    nullable: true
+  
+

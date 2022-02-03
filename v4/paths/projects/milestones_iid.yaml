@@ -1,0 +1,100 @@
+# /v4/projects/{id}/milestones/{iid}
+
+get:
+  tags:
+    - Project
+  operationId: getProjectMilestone
+  summary: Gets a single project milestone. 
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path      
+      required: true
+      schema:
+        type: integer
+      description: The ID of the milestone of the project 
+  responses:
+    '200':
+      description: A list of project related issues.
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/milestone.yaml"
+    
+put:
+  tags:
+    - Project
+  operationId: editProjectMilestone
+  summary: Updates an existing project milestone.  
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true      
+      schema:
+        type: integer
+      description: The ID of the milestone of the project
+    - name: title
+      in: query
+      schema:
+        type: string
+      description: The title of a milestone
+    - name: description
+      in: query
+      schema:
+        type: string
+      description: The description of the milestone
+    - name: due_date
+      in: query
+      schema:
+        type: string
+      description: The due date of the milestone
+    - name: start_date
+      in: query
+      schema:
+        type: string
+      description: The start date of the milestone
+    - name: state_event
+      in: query
+      schema:
+        $ref: "../../enums/milestoneState.yaml"
+      description: The state event of the milestone (`close` or `activate`).
+  responses:
+    '200':
+      description: A list of project related issues.
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/milestone.yaml"
+
+delete:
+  tags:
+    - Project
+  operationId: deleteProjectMilestone
+  summary: Only for users with the Developer role in the project.  
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iid
+      in: path
+      required: true      
+      schema:
+        type: integer
+      description: The ID of the milestone of the project 
+  responses:
+    '204':
+      description: No Content
