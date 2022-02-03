@@ -37,6 +37,8 @@ paths:
     $ref: "./v4/paths/projects/labels_iid.yaml"
   /v4/projects/{id}/labels:
     $ref: "./v4/paths/projects/labels.yaml"
+  /v4/projects/{id}/milestones:
+    $ref: "./v4/paths/projects/milestones.yaml"
   
 
 components:

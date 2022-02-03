@@ -1,0 +1,44 @@
+# /v4/projects/{id}/milestones
+
+get:
+  tags:
+    - Project
+  operationId: getProjectMilestones
+  summary: Returns a list of project milstones.
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the project owned by the authenticated user.
+    - name: iids
+      in: query      
+      schema:
+        type: array
+        items:
+          type: integer
+      description: > 
+        Return only the milestones having the given iid 
+        **Note:** It is ignored if `include_parent_milestones` is set as `true`!
+    - name: state
+      in: query
+      schema:
+        $ref: "../../enums/dueDate.yaml"
+      description: Return only `active` or `closed` milestones
+    - name: title
+      in: query
+      schema:
+        type: string
+      description: Return only the milestones having the given `title`
+    - name: serach
+      in: query
+      schema:
+        type: string
+      description: Return only milestones with a title or description matching the provided string.
+    - name: include_parent_milestones
+      in: query
+      schema:
+        type: boolean
+      description: Include group milestones from parent group and its ancestors. Introduced in GitLab 13.4.
+      
