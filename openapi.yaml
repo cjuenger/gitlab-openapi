@@ -39,8 +39,13 @@ paths:
     $ref: "./v4/paths/projects/labels.yaml"
   /v4/projects/{id}/milestones:
     $ref: "./v4/paths/projects/milestones.yaml"
+  /v4/projects/{id}/milestones/{iid}:
+    $ref: "./v4/paths/projects/milestones_iid.yaml"
+  /v4/projects/{id}/milestones/{iid}/issues:
+    $ref: "./v4/paths/projects/milestones_iid_issues.yaml"
+  /v4/projects/{id}/milestones/{iid}/merge_requests:
+    $ref: "./v4/paths/projects/milestones_iid_merge_requests.yaml"
   
-
 components:
   securitySchemes:
     bearerAuth:
