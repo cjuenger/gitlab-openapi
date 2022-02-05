@@ -68,7 +68,7 @@ post:
       required: true
       schema:
         type: string
-      description: 	The title of a milestone 
+      description: Title of the milestone
     - name: description
       in: query
       schema:
@@ -91,4 +91,3 @@ post:
         application/json:
           schema:
             $ref: "../../schemas/milestone.yaml"
-
