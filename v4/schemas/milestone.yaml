@@ -28,8 +28,7 @@ properties:
     format: date-time
     nullable: true
   expired:
-    type: string
-    format: date-time
+    type: boolean
     nullable: true
   web_url:
     type: string
