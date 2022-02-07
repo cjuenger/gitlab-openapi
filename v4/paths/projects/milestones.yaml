@@ -21,6 +21,11 @@ get:
       description: > 
         Return only the milestones having the given iid 
         **Note:** It is ignored if `include_parent_milestones` is set as `true`!
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Returned issues are paginated and this argument specified the (1-based) page number.
     - name: state
       in: query
       schema:

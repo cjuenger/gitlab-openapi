@@ -6,6 +6,11 @@ get:
   operationId: getProjects
   summary: Returns a list of projects.
   parameters:
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Returned issues are paginated and this argument specified the (1-based) page number.
     - name: archived
       in: query      
       schema:
