@@ -33,6 +33,8 @@ paths:
     $ref: "./v4/paths/projects/issues_iid_todo.yaml"
   /v4/projects/{id}/issues/{iid}/time_stats:
     $ref: "./v4/paths/projects/issues_iid_time_stats.yaml"
+  /v4/projects/{id}/issues_statistics:
+    $ref: "./v4/paths/projects/issues_statistics.yaml"  
   /v4/projects/{id}/labels/{iid}:
     $ref: "./v4/paths/projects/labels_iid.yaml"
   /v4/projects/{id}/labels:

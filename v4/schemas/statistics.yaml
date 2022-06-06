@@ -1,0 +1,4 @@
+type: object
+properties:
+  counts:
+    $ref: "./counts.yaml"

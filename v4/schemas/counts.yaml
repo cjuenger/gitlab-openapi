@@ -1,0 +1,8 @@
+type: object
+properties:
+  all: 
+    type: integer
+  closed:
+    type: integer
+  opened:
+    type: integer
