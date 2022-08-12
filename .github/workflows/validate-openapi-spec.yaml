@@ -1,0 +1,26 @@
+name: validate-openapi-spec
+
+on: [push]
+
+jobs:
+
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:      
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Install openapi-generator-cli
+        run: npm install @openapitools/openapi-generator-cli -g
+
+      - name: Validate openapi spec
+        id: validation
+        run: openapi-generator-cli validate -i ./openapi.yaml
