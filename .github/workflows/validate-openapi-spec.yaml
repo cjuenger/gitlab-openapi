@@ -24,7 +24,3 @@ jobs:
       - name: Validate openapi spec
         id: validation
         run: openapi-generator-cli validate -i ./openapi.yaml
-
-      - name: Evaluate validation result
-        run: echo "${{ steps.validation.outputs }}" | grep -q 'No validation issues detected' || exit 1
-        # run: openapi-generator-cli validate -i ./openapi.yaml | grep -q 'No validation issues detected' || exit 1
