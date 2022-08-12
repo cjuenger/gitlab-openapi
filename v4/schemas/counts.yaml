@@ -3,6 +3,6 @@ properties:
   all: 
     type: integer
   closed:
-    type: integer
+    type: intege
   opened:
     type: integer
