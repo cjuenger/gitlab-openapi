@@ -1,1 +1,15 @@
 generated
+.nuke/temp/build.2022-08-14_15-48-21.log
+.nuke/temp/build.2022-08-14_16-03-39.log
+.nuke/temp/build.2022-08-14_16-08-06.log
+.nuke/temp/build.2022-08-14_16-08-40.log
+.nuke/temp/build.2022-08-14_16-09-03.log
+.nuke/temp/build.2022-08-14_16-28-57.log
+.nuke/temp/build.log
+.nuke/temp/build-attempt.log
+build/.editorconfig
+build/.idea/.idea.GitLabClient.Build.dir/.idea/.name
+/build/.idea
+/build/bin
+/build/obj
+/openapitools.json
