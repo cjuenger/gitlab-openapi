@@ -102,7 +102,7 @@ class Build : NukeBuild
                         "This library provides client to GitLab's web API.\n" +
                         "It is generated from an OpenAPI specification by using the tool openapi-generator-cli.")
                     .SetAuthors("Christian Jünger")
-                    // .SetProperty("PackageLicenseExpression", "MIT")
+                    .SetProperty("PackageLicenseExpression", "MIT")
                     .SetRepositoryUrl("https://github.com/cjuenger/gitlab-openapi")
                     .SetOutputDirectory(PackageOutputDirectory)
                     .SetConfiguration(Configuration)
