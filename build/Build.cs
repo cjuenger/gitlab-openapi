@@ -71,10 +71,12 @@ class Build : NukeBuild
                 
                 DotNetPack(settings => settings
                     .SetProject(project)
-                    .SetDescription("Bla bla bla")
+                    .SetDescription(
+                        "This library provides client to GitLab's web API.\n" +
+                        "It is generated from an OpenAPI specification by using the tool openapi-generator-cli.")
                     .SetAuthors("Christian Jünger")
-                    .SetPackageLicenseUrl()
-                    .SetRepositoryUrl()
+                    .SetProperty("PackageLicenseExpression", "MIT")
+                    .SetRepositoryUrl("https://github.com/cjuenger/gitlab-openapi")
                     .SetOutputDirectory(PackageOutputDirectory)
                     .SetConfiguration(Configuration)
                     .EnableNoBuild()
