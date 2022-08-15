@@ -59,7 +59,7 @@ class Build : NukeBuild
             
             OpenApiGeneratorCli("generate -g csharp-netcore " +
                                 "--additional-properties=targetFramework=net5.0 " +
-                                "--additional-properties=packageName=IO.Juenger.GitLabClient " +
+                                "--additional-properties=packageName=Io.Juenger.GitLabClient " +
                                 "-i ./openapi.yaml " +
                                 $"-o {OutputDirectory}");
         });
