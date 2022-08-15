@@ -1,11 +1,10 @@
 name: "Publish"
 
-on: [push]
-# on:
-#   push:
-#     tags:
-#       - "v**.**.**" # Semantic Versioning like "v1.22.3"
-#       - "v**.**.**-**" # Prerelease Semantic Versioning like "v1.22.3-rc4"
+on:
+  push:
+    tags:
+      - "v**.**.**" # Semantic Versioning like "v1.22.3"
+      - "v**.**.**-**" # Prerelease Semantic Versioning like "v1.22.3-rc4"
 
 jobs:
   publish:
@@ -36,8 +35,5 @@ jobs:
       - name: Install openapi-generator-cli
         run: npm install @openapitools/openapi-generator-cli -g
       
-      - name: Test Packing
-        run: ./build/build.sh -Target Pack -Configuration Release --nuget_api_key_gitlabclient ${{ secrets.NUGET_API_KEY_GITLABCLIENT }}
-
-      # - name: Run publish with nuke
-      #   run: ./build/build.sh -Target Publish -Configuration Release --nuget_api_key_gitlabclient ${{ secrets.NUGET_API_KEY_GITLABCLIENT }}
+      - name: Publish with nuke
+        run: ./build/build.sh -Target Publish -Configuration Release --nuget_api_key_gitlabclient ${{ secrets.NUGET_API_KEY_GITLABCLIENT }}

@@ -13,7 +13,9 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
-    public static int Main () => Execute<Build>(x => x.Generate);
+    Solution Solution;
+    
+    public static int Main () => Execute<Build>(x => x.Compile);
 
     [Parameter("NuGet API Key for io.juenger.GitLabClient Package", Name = "NUGET_API_KEY_GITLABCLIENT")]
     readonly string NuGetApiKey;
@@ -51,27 +53,42 @@ class Build : NukeBuild
         .DependsOn(Setup)
         .Executes(() =>
         {
-            // NpmTasks.Npm("exec @openapitools/openapi-generator-cli generate -g csharp-netcore " +
-            //              "--additional-properties=targetFramework=net5.0 " +
-            //              "--additional-properties=packageName=IO.Juenger.GitLabClient " +
-            //              "-i ./openapi.yaml " +
-            //              $"-o {OutputDirectory}");
-            
             OpenApiGeneratorCli("generate -g csharp-netcore " +
                                 "--additional-properties=targetFramework=net5.0 " +
                                 "--additional-properties=packageName=Io.Juenger.GitLabClient " +
                                 "-i ./openapi.yaml " +
                                 $"-o {OutputDirectory}");
+            
+            var solutionFile = OutputDirectory / "Io.Juenger.GitLabClient.sln";
+            Solution = ProjectModelTasks.ParseSolution(solutionFile);
         });
 
-     Target Pack => _ => _
+    Target Restore => _ => _
         .DependsOn(Generate)
         .Executes(() =>
         {
-            var solutionFile = OutputDirectory / "Io.Juenger.GitLabClient.sln";
-            var solution = ProjectModelTasks.ParseSolution(solutionFile);
-            
-            var packableProjects = solution
+            DotNetRestore(settings => settings.SetProjectFile(Solution));
+        });
+    
+    Target Compile => _ => _
+        .DependsOn(Restore)
+        .Executes(() =>
+        {
+            DotNetBuild(settings =>
+                settings
+                    .SetProjectFile(Solution)
+                    .SetConfiguration(Configuration)
+                    .SetAssemblyVersion(GitVersion?.AssemblySemVer)
+                    .SetFileVersion(GitVersion?.AssemblySemFileVer)
+                    .SetInformationalVersion(GitVersion?.InformationalVersion)
+                    .EnableNoRestore());
+        });
+    
+     Target Pack => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            var packableProjects = Solution
                 .AllProjects
                 .Where(project => project.GetProperty<bool>("IsPackable")) ?? Enumerable.Empty<Project>();
 
@@ -85,7 +102,7 @@ class Build : NukeBuild
                         "This library provides client to GitLab's web API.\n" +
                         "It is generated from an OpenAPI specification by using the tool openapi-generator-cli.")
                     .SetAuthors("Christian Jünger")
-                    .SetProperty("PackageLicenseExpression", "MIT")
+                    // .SetProperty("PackageLicenseExpression", "MIT")
                     .SetRepositoryUrl("https://github.com/cjuenger/gitlab-openapi")
                     .SetOutputDirectory(PackageOutputDirectory)
                     .SetConfiguration(Configuration)

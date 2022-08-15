@@ -13,3 +13,5 @@ build/.idea/.idea.GitLabClient.Build.dir/.idea/.name
 /build/bin
 /build/obj
 /openapitools.json
+/.nuke/temp
+/packages
