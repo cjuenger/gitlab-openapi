@@ -3,6 +3,7 @@ using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.Npm;
@@ -22,6 +23,9 @@ class Build : NukeBuild
     
     [GitVersion] 
     readonly GitVersion GitVersion;
+    
+    [PathExecutable("openapi-generator-cli")]
+    readonly Tool OpenApiGeneratorCli;
 
     static AbsolutePath OutputDirectory => RootDirectory / "generated";
     static AbsolutePath PackageOutputDirectory => RootDirectory / "packages";
@@ -47,11 +51,17 @@ class Build : NukeBuild
         .DependsOn(Setup)
         .Executes(() =>
         {
-            NpmTasks.Npm("exec @openapitools/openapi-generator-cli generate -g csharp-netcore " +
-                         "--additional-properties=targetFramework=net5.0 " +
-                         "--additional-properties=packageName=IO.Juenger.GitLabClient " +
-                         "-i ./openapi.yaml " +
-                         $"-o {OutputDirectory}");
+            // NpmTasks.Npm("exec @openapitools/openapi-generator-cli generate -g csharp-netcore " +
+            //              "--additional-properties=targetFramework=net5.0 " +
+            //              "--additional-properties=packageName=IO.Juenger.GitLabClient " +
+            //              "-i ./openapi.yaml " +
+            //              $"-o {OutputDirectory}");
+            
+            OpenApiGeneratorCli("generate -g csharp-netcore " +
+                                "--additional-properties=targetFramework=net5.0 " +
+                                "--additional-properties=packageName=IO.Juenger.GitLabClient " +
+                                "-i ./openapi.yaml " +
+                                $"-o {OutputDirectory}");
         });
 
      Target Pack => _ => _
