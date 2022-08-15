@@ -68,7 +68,8 @@ class Build : NukeBuild
         .DependsOn(Generate)
         .Executes(() =>
         {
-            var solution = ProjectModelTasks.ParseSolution(OutputDirectory + "Io.Juenger.GitLabClient.sln");
+            var solutionFile = OutputDirectory / "Io.Juenger.GitLabClient.sln";
+            var solution = ProjectModelTasks.ParseSolution(solutionFile);
             
             var packableProjects = solution
                 .AllProjects
