@@ -22,10 +22,7 @@ class Build : NukeBuild
     
     [GitVersion] 
     readonly GitVersion GitVersion;
-    
-    [Solution]
-    readonly Solution Solution;
-    
+
     static AbsolutePath OutputDirectory => RootDirectory / "generated";
     static AbsolutePath PackageOutputDirectory => RootDirectory / "packages";
     
@@ -54,14 +51,16 @@ class Build : NukeBuild
                          "--additional-properties=targetFramework=net5.0 " +
                          "--additional-properties=packageName=IO.Juenger.GitLabClient " +
                          "-i ./openapi.yaml " +
-                         $"-o {OutputDirectory}/client");
+                         $"-o {OutputDirectory}");
         });
 
      Target Pack => _ => _
         .DependsOn(Generate)
         .Executes(() =>
         {
-            var packableProjects = Solution?
+            var solution = ProjectModelTasks.ParseSolution(OutputDirectory + "Io.Juenger.GitLabClient.sln");
+            
+            var packableProjects = solution
                 .AllProjects
                 .Where(project => project.GetProperty<bool>("IsPackable")) ?? Enumerable.Empty<Project>();
 
