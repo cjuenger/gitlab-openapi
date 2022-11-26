@@ -1,15 +1,18 @@
 type: object
 properties:
-  id:
+  id: 
     type: integer
-  name: 
+  web_url: "https://gitlab.com/groups/xn--tg8h",
+    type: string
+    format: uri
+  name:
     type: string
   path:
     type: string
-  description: 
+  description:
     type: string
   visibility:
-    type: ???
+    $ref: "../enums/visibility.yaml"
   share_with_group_lock:
     type: boolean
   require_two_factor_authentication:
@@ -17,37 +20,38 @@ properties:
   two_factor_grace_period:
     type: integer
   project_creation_level:
-    type: ???
+    $ref: "../enums/projectCreationLevel.yaml"
   auto_devops_enabled:
-    type: ???
+    type: boolean
   subgroup_creation_level:
-    type: ???
+    $ref: "../enums/subgroupCreationLevel.yaml" 
   emails_disabled:
-    type: ???
-  mentions_disabled:
-    type: ???
+    type: boolean
+    nullable: true
+  mentions_disabled: 
+    type: boolean
+    nullable: true
   lfs_enabled:
     type: boolean
   default_branch_protection:
-    type: integer
-  avatar_url:
+    $ref: "../enums/dueDate.yaml"        
+  avatar_url: 
     type: string
-    format: uri
-  web_url:
-    type: string
-    format: uri
-  request_access_enabled:
+    nullable: true
+  request_access_enabled: 
     type: boolean
-  full_name:
+  full_name: 
     type: string
-  full_path:
+  full_path: 
     type: string
-  file_template_project_id:
-    type: integer
-  parent_id:
-    type: ???
   created_at:
-    type : string
+    type: string
     format: date-time
-  ip_restriction_ranges:
-    type: ???
+  parent_id: 
+    type: integer
+    nullable: true
+  ldap_cn: 
+    type: string
+  ldap_access: 
+    type: boolean
+    nullable: true

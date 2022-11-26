@@ -1,2 +1,72 @@
 # /v4/groups
 
+get:
+  tags:
+    - Group
+  operationId: getGroups
+  summary: Returns a list of all groups.
+  parameters:
+    - name: skip_groups
+      in: query
+      schema:
+        type: array
+        items:
+          type: integer
+      description: Skip the group IDs passed
+    - name: all_available
+      in: query
+      schema:
+        type: boolean
+      description: > 
+        Show all the groups you have access to (defaults to `false` for authenticated users, 
+        `true` for administrators); Attributes owned and `min_access_level` have precedence
+    - name: search
+      in: query
+      schema:
+        type: string
+      description: Return the list of authorized groups matching the search criteria
+    - name: order_by
+      in: query
+      schema:
+        $ref: "../../enums/orderGroupBy.yaml"
+      description: > 
+        Order groups by `name`, `path`, `id`, or `similarity` (if searching, introduced in GitLab 14.1). Default is `name`
+    - name: sort
+      in: query
+      schema:
+        $ref: "../../enums/sortingOrder.yaml"
+      description: Order groups in `asc` or `desc` order. Default is `asc`
+    - name: statistics
+      in: query
+      schema:
+        type: boolean
+      description: Include group statistics (administrators only)
+    - name: with_custom_attributes
+      schema:
+        type: boolean
+      description: Include custom attributes in response (administrators only)
+    - name: owned
+      in: query
+      schema:
+        type: boolean
+      description: Limit to groups explicitly owned by the current user
+    - name: min_access_level
+      in: query
+      schema:
+        type: integer
+      description: Limit to groups where current user has at least this role (`access_level`)
+    - name: top_level_only
+      in: query
+      schema:
+        type: boolean
+      description: Limit to top level groups, excluding all subgroups    
+
+  responses:
+    '200':
+      description: A list of all groups.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../../schemas/group.yaml"

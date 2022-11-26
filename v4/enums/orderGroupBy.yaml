@@ -1,0 +1,6 @@
+type: string
+enum:
+  - name
+  - path
+  - id
+  - similarity
