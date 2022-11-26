@@ -52,7 +52,7 @@ post:
   tags:
     - Group
   operationId: createNewGroupLabel
-  summary: Returns the created group label.
+  summary: Create a new group label
   parameters:
     - name: id
       in: path
