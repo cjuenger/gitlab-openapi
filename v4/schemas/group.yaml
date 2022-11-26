@@ -2,7 +2,7 @@ type: object
 properties:
   id: 
     type: integer
-  web_url: "https://gitlab.com/groups/xn--tg8h",
+  web_url:
     type: string
     format: uri
   name:

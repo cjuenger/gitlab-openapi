@@ -42,6 +42,7 @@ get:
         type: boolean
       description: Include group statistics (administrators only)
     - name: with_custom_attributes
+      in: query
       schema:
         type: boolean
       description: Include custom attributes in response (administrators only)
@@ -59,7 +60,7 @@ get:
       in: query
       schema:
         type: boolean
-      description: Limit to top level groups, excluding all subgroups    
+      description: Limit to top level groups, excluding all subgroups
 
   responses:
     '200':
