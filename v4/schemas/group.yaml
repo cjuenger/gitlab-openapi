@@ -55,3 +55,6 @@ properties:
   ldap_access: 
     type: boolean
     nullable: true
+required:
+  - name
+  - path

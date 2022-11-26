@@ -221,7 +221,7 @@ post:
   tags:
     - Project
   operationId: createNewProjectIssue
-  summary: Returns a list of project related issues.
+  summary: Create a new project
   parameters:
     - name: id
       in: path
