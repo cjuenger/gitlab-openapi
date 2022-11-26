@@ -1,0 +1,53 @@
+type: object
+properties:
+  id:
+    type: integer
+  name: 
+    type: string
+  path:
+    type: string
+  description: 
+    type: string
+  visibility:
+    type: ???
+  share_with_group_lock:
+    type: boolean
+  require_two_factor_authentication:
+    type: boolean
+  two_factor_grace_period:
+    type: integer
+  project_creation_level:
+    type: ???
+  auto_devops_enabled:
+    type: ???
+  subgroup_creation_level:
+    type: ???
+  emails_disabled:
+    type: ???
+  mentions_disabled:
+    type: ???
+  lfs_enabled:
+    type: boolean
+  default_branch_protection:
+    type: integer
+  avatar_url:
+    type: string
+    format: uri
+  web_url:
+    type: string
+    format: uri
+  request_access_enabled:
+    type: boolean
+  full_name:
+    type: string
+  full_path:
+    type: string
+  file_template_project_id:
+    type: integer
+  parent_id:
+    type: ???
+  created_at:
+    type : string
+    format: date-time
+  ip_restriction_ranges:
+    type: ???
