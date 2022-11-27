@@ -12,7 +12,7 @@ servers:
 
 paths:
 
-  # PROJECT
+  # PROJECTS
   /v4/projects:
     $ref: "./v4/paths/projects/projects.yaml"
   /v4/projects/{id}:
@@ -47,6 +47,14 @@ paths:
     $ref: "./v4/paths/projects/milestones_iid_issues.yaml"
   /v4/projects/{id}/milestones/{iid}/merge_requests:
     $ref: "./v4/paths/projects/milestones_iid_merge_requests.yaml"
+
+  # GROUPS
+  /v4/groups:
+    $ref: "./v4/paths/groups/groups.yaml"
+  /v4/groups/{id}/labels:
+    $ref: "./v4/paths/groups/labels.yaml"
+  /v4/groups/{id}/labels/{iid}:
+    $ref: "./v4/paths/groups/labels_iid.yaml"
   
 components:
   securitySchemes:

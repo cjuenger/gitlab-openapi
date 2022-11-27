@@ -1,22 +1,17 @@
-# /v4/projects/{id}/labels
-  
+# /v4/groups/{id}/labels
+
 get:
   tags:
-    - Project
-  operationId: getProjectLabels
-  summary: Returns a list of project related labels.
+    - Group
+  operationId: getGroupLabels
+  summary: Returns a list of group related labels.
   parameters:
     - name: id
       in: path
       required: true
       schema:
         type : string
-      description: The ID or URL-encoded path of the project owned by the authenticated user.
-    - name: page
-      in: query
-      schema:
-        type: integer
-      description: Returned issues are paginated and this argument specified the (1-based) page number.
+      description: The ID or URL-encoded path of the group owned by the authenticated user.
     - name: with_counts
       in: query
       schema:
@@ -27,6 +22,16 @@ get:
       schema:
         type: boolean
       description: Include ancestor groups. Defaults to true.
+    - name: include_descendant_groups
+      in: query
+      schema:
+        type: boolean
+      description: Include descendant groups. Defaults to false. Introduced in GitLab 13.6
+    - name: only_group_labels
+      in: query
+      schema:
+        type: boolean
+      description: Toggle to include only group labels or also project labels. Defaults to true. Introduced in GitLab 13.6
     - name: search
       in: query
       schema: 
@@ -35,7 +40,7 @@ get:
 
   responses:
     '200':
-      description: A list of project related labels.
+      description: A list of all labels for a given group.
       content:
         application/json:
           schema:
@@ -45,9 +50,9 @@ get:
 
 post:
   tags:
-    - Project
-  operationId: createNewProjectLabel
-  summary: Returns the created project label.
+    - Group
+  operationId: createNewGroupLabel
+  summary: Create a new group label
   parameters:
     - name: id
       in: path
@@ -73,14 +78,6 @@ post:
       schema:
         type: string
       description: The description of the label.
-    - name: priority
-      in: query
-      schema:
-        type: integer
-        nullable: true
-      description: >
-        The priority of the label. 
-        Must be greater or equal than zero or null to remove the priority. 
 
   responses:
     '201':
@@ -93,4 +90,4 @@ post:
       $ref: "../../responses/badRequest.yaml"
     '409':
       $ref: "../../responses/conflict.yaml"
-            
+  
