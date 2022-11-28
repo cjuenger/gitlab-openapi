@@ -12,6 +12,11 @@ get:
       schema:
         type : string
       description: The ID or URL-encoded path of the group owned by the authenticated user.
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Returned issues are paginated and this argument specified the (1-based) page number.
     - name: with_counts
       in: query
       schema:
