@@ -1,0 +1,36 @@
+# /v4/groups/{id}/labels/{iid}/subscribe
+
+post:
+  tags:
+    - Group
+  operationId: subscribeToGroupLabel
+  summary: >
+    Subscribes the authenticated user to a label to receive notifications. 
+    If the user is already subscribed to the label, the status code `304` is returned. 
+  parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or URL-encoded path of the group owned by the authenticated user
+    - name: iid
+      in: path
+      required: true
+      schema:
+        type : string
+      description: The ID or title of a group label.
+      
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/label.yaml"
+    '304':
+      description: > 
+        Not Modified <br>
+        Returned if the user is already subscribed to the label.
+    '404':
+      $ref: "../../responses/notFound.yaml"
