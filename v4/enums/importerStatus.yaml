@@ -1,7 +1,0 @@
-type: string
-enum:
-  - none
-  - finished
-  - scheduled
-  - started
-  - failed
