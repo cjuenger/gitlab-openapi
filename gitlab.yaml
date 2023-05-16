@@ -191,8 +191,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-  /v4/projects/{id}/issues:
 
+  /v4/projects/{id}/issues:
     get:
       tags:
         - Project
@@ -379,7 +379,7 @@ paths:
           in: query
           schema:
             type: string
-            fomrat: date-time
+            format: date-time
           description: >
             Return issues updated on or before the given time. 
             Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
@@ -745,6 +745,7 @@ paths:
                 $ref: '#/components/schemas/TimeStats'
         '404':
           $ref: '#/components/responses/NotFound'
+
   /v4/projects/{id}/issues_statistics:
     get:
       tags:
@@ -849,7 +850,7 @@ paths:
           in: query
           schema:
             type: string
-            fomrat: date-time
+            format: date-time
           description: >
             Return issues updated on or before the given time. 
             Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
@@ -1382,7 +1383,7 @@ paths:
           content:
             application/json:
               schema:
-                ype: array
+                type: array
                 items:
                   $ref: '#/components/schemas/MergeRequest'
 
