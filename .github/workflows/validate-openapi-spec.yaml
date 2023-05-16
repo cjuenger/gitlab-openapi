@@ -23,4 +23,4 @@ jobs:
 
       - name: Validate openapi spec
         id: validation
-        run: openapi-generator-cli validate -i ./openapi.yaml
+        run: openapi-generator-cli validate -i ./gitlab.yaml
