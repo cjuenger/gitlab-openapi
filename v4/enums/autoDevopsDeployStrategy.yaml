@@ -1,5 +1,0 @@
-type: string
-enum:
-  - continuous
-  - manual
-  - timed_incremental

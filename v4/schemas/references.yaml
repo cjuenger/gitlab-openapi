@@ -1,8 +1,0 @@
-type: object
-properties:
-  short:
-    type: string
-  relative:
-    type: string
-  full:
-    type: string

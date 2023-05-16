@@ -1,0 +1,2842 @@
+openapi: 3.0.0
+info:
+  title: GitLab REST API V4
+  description: > 
+    This is an OpenAPI specification for the GitLab REST API. <br><br>
+    See <a href="https://docs.gitlab.com/ee/api/api_resources.html">REST API resources</a> 
+    on gitlab.org for a detailed description of the REST API.
+  version: 0.0.1
+servers:
+  - url: https://gitlab.com/api
+    description: Base REST URI of API version 4 to 'gitlab.com'.
+
+paths:
+
+  # PROJECTS
+  /v4/projects:
+    get:
+      tags:
+        - Project
+      operationId: getProjects
+      summary: Returns a list of projects.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+        - name: archived
+          in: query
+          schema:
+            type: boolean
+          description: Limit returned projects by archived status.
+        - name: id_after
+          in: query
+          schema:
+            type: integer
+          description: Limit returned projects by IDs greated than the specified one.
+        - name: id_before
+          in: query
+          schema:
+            type: integer
+          description: Limit returned projects by IDs less than the specified one.
+        - name: last_activity_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Limit returned projects with `last_activity_after` time.
+        - name: last_activity_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Limit returned projects with `last_activity_before` time.
+        - name: membership
+          in: query
+          schema:
+            type: boolean
+          description: Limit returned projects by membership of the current user.
+        - name: min_access_level
+          in: query
+          schema:
+            type: integer
+          description: Limit returned projects by the minimal access level of the current user.
+        - name: order_by
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderBy'
+          description: Return projects ordered by specified attributes.
+        - name: owned
+          in: query
+          schema:
+            type: boolean
+          description: Limits the returned projects by the explicit ownership of the current user.
+        - name: repository_checksum_failed
+          in: query
+          schema:
+            type: boolean
+          description: Limit projects where the repository checksum calculation has failed.
+        - name: repository_storage
+          in: query
+          schema:
+            type: string
+          description: Limits returned projects to projects stored on `repository_storage`. (*admins only!*)
+        - name: search_namespaces
+          in: query
+          schema:
+            type: boolean
+          description: Include ancestor namespaces when matching the search criteria. (*Default is `false`.*)
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Return s projects that matchi the search criteria.
+        - name: simple
+          in: query
+          schema:
+            type: boolean
+          description: Return only limited fields for each project.
+        - name: sort
+          in: query
+          schema:
+            $ref: '#/components/schemas/SortingOrder'
+          description: Return projects sorted in asc or desc order. Default is desc.
+        - name: starred
+          in: query
+          schema:
+            type: boolean
+          description: Limit returned projects by projects starred by the current user.
+        - name: statistics
+          in: query
+          schema:
+            type: boolean
+          description: Include project statistics. Only available to Reporter or higher level role members.
+        - name: topic
+          in: query
+          schema:
+            type: string
+          description: Comma-separated topic names. Limit results to projects that match all of given topics. See topics attribute.
+        - name: visibility
+          in: query
+          schema:
+            $ref: '#/components/schemas/Visibility'
+          description: Limit by visibility `public`, `internal`, or `private`.
+        - name: wiki_checksum_failed
+          in: query
+          schema:
+            type: boolean
+          description: Limit projects where the wiki checksum calculation has failed
+        - name: with_custom_attributes
+          in: query
+          schema:
+            type: boolean
+          description: Include custom attributes in response. (*admins only!*)
+        - name: with_issues_enabled
+          in: query
+          schema:
+            type: boolean
+          description: Limit by enabled issues feature.
+        - name: with_merge_requests_enabled
+          in: query
+          schema:
+            type: boolean
+          description: Limit by enabled merge requests feature.
+        - name: with_programming_language
+          in: query
+          schema:
+            type: string
+          description: Limit by projects which use the given programming language.
+      responses:
+        '200':
+          description: A list of projects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+  /v4/projects/{id}:
+    get:
+      tags:
+        - Project
+      operationId: getProject
+      summary: Returns a specific project.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: license
+          in: query
+          schema:
+            type: boolean
+          description: Include project license data.
+        - name: statistics
+          in: query
+          schema:
+            type: boolean
+          description: Include project statistics. Only available to Reporter or higher level role members.
+        - name: with_custom_attributes
+          in: query
+          schema:
+            type: boolean
+          description: Include custom attributes in response. (*admins only!*)
+      responses:
+        '200':
+          description: A specific project.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v4/projects/{id}/issues:
+
+    get:
+      tags:
+        - Project
+      operationId: getProjectIssues
+      summary: Returns a list of project related issues.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+        - name: assignee_id
+          in: query
+          schema:
+            type: integer
+          description: Returns issues assigned to a specific `assignee_id`.
+        - name: assignee_username
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Returns issues assigned to a specific `assignee_username`.
+        - name: author_id
+          in: query
+          schema:
+            type: integer
+          description: Returns issues that have been created by the author with the given `author_id`.
+        - name: author_username
+          in: query
+          schema:
+            type: string
+          description: Returns issues that have been created by the author with the given `author_username`.
+        - name: confidential
+          in: query
+          schema:
+            type: boolean
+          description: Filters either confidential or public issues.
+        - name: created_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Return issues created on or after the given time.
+        - name: created_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Return issues created on or before the given time.
+        - name: due_date
+          in: query
+          schema:
+            $ref: '#/components/schemas/DueDate'
+          description: >
+            Return issues that have no due date, are overdue, or whose due date 
+            is this week, this month, or between two weeks ago and next month. 
+            Accepts: `0` (no due date), `overdue`, `week`, `month`, `next_month_and_previous_two_weeks`.
+        - name: iids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Return the issues of the given `iids`.
+        - name: in
+          in: query
+          schema:
+            type: string
+          description: >
+            Allows to modify the scope of the search by specifying the elements to search in. 
+            `title`, `description`, or a string joining them with comma. Default is `title,description`
+        - name: issue_type
+          in: query
+          schema:
+            type: string
+          description: Filters for a specific type of issue.
+        - name: iteration_id
+          in: query
+          schema:
+            type: string
+          description: >
+            Return issues assigned to the given iteration ID. 
+            `None` returns issues that do not belong to an iteration. 
+            `Any` returns issues that belong to an iteration. 
+            Mutually exclusive with `iteration_title`. (Introduced in GitLab 13.6)
+            <br>
+            **NOTE: Available in GitLab Premium self-managed, GitLab Premium SaaS, and higher tiers.**
+        - name: iteration_title
+          in: query
+          schema:
+            type: string
+          description: >
+            Return issues assigned to the iteration with the given title. 
+            Similar to `iteration_id` and mutually exclusive with `iteration_id`. (Introduced in GitLab 13.6)
+            <br>
+            **NOTE: Available in GitLab Premium self-managed, GitLab Premium SaaS, and higher tiers.**
+        - name: labels
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: >
+            Comma-separated list of label names, issues must have all labels to be returned. 
+            `None` lists all issues with no labels. 
+            `Any` lists all issues with at least one label.
+        - name: milestone
+          in: query
+          schema:
+            type: string
+          description: >
+            The milestone title. 
+            `None` lists all issues with no milestone. 
+            `Any` lists all issues that have an assigned milestone.
+        - name: my_reaction_emoji
+          in: query
+          schema:
+            type: string
+          description: >
+            Return issues reacted by the authenticated user by the given emoji. 
+            `None` returns issues not given a reaction. 
+            `Any` returns issues given at least one reaction. (Introduced in GitLab 10.0)
+        - name: non_archived
+          in: query
+          schema:
+            type: boolean
+          description: >
+            Return issues only from non-archived projects. 
+            If `false`, the response returns issues from both archived and non-archived projects. 
+            Default is `true`. (Introduced in GitLab 13.0)
+        # TODO: 20210725 cjuenger: Specify `not` property as soon as I know how!
+        # - name: not
+        #   in: query
+        #   schema:
+        #     type: string
+        #     format:
+        #   description:
+        - name: order_by
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderBy'
+          description: >
+            Return issues ordered by `created_at`, `updated_at`, `priority`, `due_date`, `relative_position`, 
+            `label_priority`, `milestone_due`, `popularity`, `weight` fields. <br>
+            Default is `created_at`
+        - name: scope
+          in: query
+          schema:
+            $ref: '#/components/schemas/Scope'
+          description: >
+            Return issues for the given scope: `created_by_me`, `assigned_to_me` or `all`. <br>
+            Defaults to `created_by_me`
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search issues against their `title` and `description`
+        - name: sort
+          in: query
+          schema:
+            $ref: '#/components/schemas/SortingOrder'
+          description: Return issues sorted in `asc` or `desc` order. Default is `desc`
+        - name: state
+          in: query
+          schema:
+            $ref: '#/components/schemas/State'
+          description: Return `all` issues or just those that are `opened` or `closed`
+        - name: updated_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: >
+            Return issues updated on or after the given time. <br>
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
+        - name: updated_before
+          in: query
+          schema:
+            type: string
+            fomrat: date-time
+          description: >
+            Return issues updated on or before the given time. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
+        - name: weight
+          in: query
+          schema:
+            type: integer
+          description: >
+            Return issues with the specified `weight`. 
+            `None` returns issues with no weight assigned. 
+            `Any` returns issues with a weight assigned.
+        - name: with_labels_details
+          in: query
+          schema:
+            type: boolean
+          description: >
+            If `true`, the response returns more details for each label in labels field: 
+            `:name`, `:color`, `:description`, `:description_html`, `:text_color`. 
+            Default is `false`. <br>
+            The description_html attribute was introduced in GitLab 12.7
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+
+    post:
+      tags:
+        - Project
+      operationId: createNewProjectIssue
+      summary: Create a new project
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+      requestBody:
+        description: Details of the issue to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewIssue'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v4/projects/{id}/issues/{iid}:
+    get:
+      tags:
+        - Project
+      operationId: getProjectIssue
+      summary: Returns a specific project issues.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Project
+      operationId: updateProjectIssue
+      summary: Edits an existing issue.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      requestBody:
+        description: Details of the issue to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditIssue'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+    delete:
+      tags:
+        - Project
+      operationId: deleteProjectIssue
+      summary: Deletes an existing issue.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues/{iid}/reorder:
+
+    put:
+      tags:
+        - Project
+      operationId: reorderProjectIssue
+      summary: Reorders an issue.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+        - name: move_after_id
+          in: query
+          schema:
+            type: integer
+          description: The ID of a project’s issue, after this issue shall be placed.
+        - name: move_before_id
+          in: query
+          schema:
+            type: integer
+          description: The ID of a project’s issue, before this issue shall be placed.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/UnProcessableEntity'
+  /v4/projects/{id}/issues/{iid}/move:
+    post:
+      tags:
+        - Project
+      operationId: moveIssueToProject
+      summary: Moves a project issue to a different project.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+        - name: to_project_id
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: The ID of the new project
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues/{iid}/subscribe:
+    post:
+      tags:
+        - Project
+      operationId: subscribeToProjectIssue
+      summary: >
+        Subscribes the authenticated user to an issue to receive notifications. 
+        If the user is already subscribed to the issue, the status code `304` is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already subscribed to the issue.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues/{iid}/unsubscribe:
+    post:
+      tags:
+        - Project
+      operationId: unsubscribeFromProjectIssue
+      summary: >
+        Unsubscribes the authenticated user from the issue to not receive notifications from it. 
+        If the user is not subscribed to the issue, the status code 304 is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already unsubscribed from the issue.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues/{iid}/todo:
+    post:
+      tags:
+        - Project
+      operationId: createTodoItemForProjectIssue
+      summary: >
+        Manually creates a to-do item for the current user on an issue. 
+        If there already exists a to-do item for the user on that issue, status code 304 is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the a to-do item already exsists for this issue, for the user user.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues/{iid}/time_stats:
+    get:
+      tags:
+        - Project
+      operationId: getTimeStatsOfProjectIssue
+      summary: >
+        Retrieves time status of a specific project issue.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeStats'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/issues_statistics:
+    get:
+      tags:
+        - Project
+      operationId: getProjectIssuesStatistics
+      summary: Returns a list of project related issues statistics.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Return only the milestone having the given iid.
+        - name: labels
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: >
+            Comma-separated list of label names, issues must have all labels to be returned. 
+            `None` lists all issues with no labels. 
+            `Any` lists all issues with at least one label.
+        - name: milestone
+          in: query
+          schema:
+            type: string
+          description: >
+            The milestone title. 
+            `None` lists all issues with no milestone. 
+            `Any` lists all issues that have an assigned milestone.
+        - name: scope
+          in: query
+          schema:
+            $ref: '#/components/schemas/Scope'
+          description: >
+            Return issues for the given scope: `created_by_me`, `assigned_to_me` or `all`. <br>
+            Defaults to `created_by_me`
+        - name: author_id
+          in: query
+          schema:
+            type: integer
+          description: Returns issues that have been created by the author with the given `author_id`.
+        - name: author_username
+          in: query
+          schema:
+            type: string
+          description: Returns issues that have been created by the author with the given `author_username`.
+        - name: assignee_id
+          in: query
+          schema:
+            type: integer
+          description: Returns issues assigned to a specific `assignee_id`.
+        - name: assignee_username
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: Returns issues assigned to a specific `assignee_username`.
+        - name: my_reaction_emoji
+          in: query
+          schema:
+            type: string
+          description: >
+            Return issues reacted by the authenticated user by the given emoji. 
+            `None` returns issues not given a reaction. 
+            `Any` returns issues given at least one reaction. (Introduced in GitLab 10.0)
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search issues against their `title` and `description`
+        - name: created_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Return issues created on or after the given time.
+        - name: created_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: Return issues created on or before the given time.
+        - name: updated_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: >
+            Return issues updated on or after the given time. <br>
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
+        - name: updated_before
+          in: query
+          schema:
+            type: string
+            fomrat: date-time
+          description: >
+            Return issues updated on or before the given time. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`)
+        - name: confidential
+          in: query
+          schema:
+            type: boolean
+          description: Filters either confidential or public issues.
+      responses:
+        '200':
+          description: Project issues statistics.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statistics'
+  /v4/projects/{id}/labels/{iid}:
+    get:
+      tags:
+        - Project
+      operationId: getProjectLabel
+      summary: Returns a specific project label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related label.
+        - name: include_ancestor_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include ancestor groups. Defaults to true.
+      responses:
+        '200':
+          description: A specific project label.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Project
+      operationId: updateProjectLabel
+      summary: Edits an existing project label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+
+      requestBody:
+        description: Details of the issue to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditLabel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+    delete:
+      tags:
+        - Project
+      operationId: deleteProjectLabel
+      summary: Deletes an existing label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/labels/{iid}/subscribe:
+    post:
+      tags:
+        - Project
+      operationId: subscribeToProjectLabel
+      summary: >
+        Subscribes the authenticated user to a label to receive notifications. 
+        If the user is already subscribed to the label, the status code `304` is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or title of a projects label.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already subscribed to the label.
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /v4/projects/{id}/labels/{iid}/unsubscribe:
+    post:
+      tags:
+        - Project
+      operationId: unsubscribeFromProjectLabel
+      summary: >
+        Unsubscribes the authenticated user from a label to not receive notifications from it. 
+        If the user is not subscribed to the label, the status code `304` is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or title of a project label
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already unsubscribed from the label.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/projects/{id}/labels:
+    get:
+      tags:
+        - Project
+      operationId: getProjectLabels
+      summary: Returns a list of project related labels.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+        - name: with_counts
+          in: query
+          schema:
+            type: boolean
+          description: Whether or not to include issue and merge request counts. Defaults to false.
+        - name: include_ancestor_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include ancestor groups. Defaults to true.
+        - name: search
+          in: query
+          schema:
+            type: boolean
+          description: Keyword to filter labels by.
+
+      responses:
+        '200':
+          description: A list of project related labels.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+
+    post:
+      tags:
+        - Project
+      operationId: createNewProjectLabel
+      summary: Returns the created project label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the label
+        - name: color
+          in: query
+          required: true
+          schema:
+            type: string
+          description: >
+            The color of the label given in 6-digit hex notation with leading ‘#’ sign (for example, #FFAABB) or one of the CSS color names
+        - name: description
+          in: query
+          schema:
+            type: string
+          description: The description of the label.
+        - name: priority
+          in: query
+          schema:
+            type: integer
+            nullable: true
+          description: >
+            The priority of the label. 
+            Must be greater or equal than zero or null to remove the priority. 
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v4/projects/{id}/milestones:
+    get:
+      tags:
+        - Project
+      operationId: getProjectMilestones
+      summary: Returns a list of project milstones.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: >
+            Return only the milestones having the given iid 
+            **Note:** It is ignored if `include_parent_milestones` is set as `true`!
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+        - name: state
+          in: query
+          schema:
+            $ref: '#/components/schemas/MilestoneState'
+          description: Return only `active` or `closed` milestones
+        - name: title
+          in: query
+          schema:
+            type: string
+          description: Return only the milestones having the given `title`
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Return only milestones with a title or description matching the provided string.
+        - name: include_parent_milestones
+          in: query
+          schema:
+            type: boolean
+          description: Include group milestones from parent group and its ancestors. Introduced in GitLab 13.4.
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Milestone'
+
+    post:
+      tags:
+        - Project
+      operationId: createProjectMilestone
+      summary: Creates a new project milestone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Title of the milestone
+        - name: description
+          in: query
+          schema:
+            type: string
+          description: The description of the milestone
+        - name: due_date
+          in: query
+          schema:
+            type: string
+          description: The due date of the milestone
+        - name: start_date
+          in: query
+          schema:
+            type: string
+          description: The start date of the milestone.
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Milestone'
+  /v4/projects/{id}/milestones/{iid}:
+    get:
+      tags:
+        - Project
+      operationId: getProjectMilestone
+      summary: Gets a single project milestone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the milestone of the project
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Milestone'
+
+    put:
+      tags:
+        - Project
+      operationId: editProjectMilestone
+      summary: Updates an existing project milestone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the milestone of the project
+        - name: title
+          in: query
+          schema:
+            type: string
+          description: The title of a milestone
+        - name: description
+          in: query
+          schema:
+            type: string
+          description: The description of the milestone
+        - name: due_date
+          in: query
+          schema:
+            type: string
+          description: The due date of the milestone
+        - name: start_date
+          in: query
+          schema:
+            type: string
+          description: The start date of the milestone
+        - name: state_event
+          in: query
+          schema:
+            $ref: '#/components/schemas/MilestoneState'
+          description: The state event of the milestone (`close` or `activate`).
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Milestone'
+
+    delete:
+      tags:
+        - Project
+      operationId: deleteProjectMilestone
+      summary: Only for users with the Developer role in the project.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the milestone of the project
+      responses:
+        '204':
+          description: No Content
+  /v4/projects/{id}/milestones/{iid}/issues:
+    get:
+      tags:
+        - Project
+      operationId: getAllIssuesOfProjectMilestone
+      summary: Gets all issues assigned to a single project milestone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the milestone of the project
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+      responses:
+        '200':
+          description: A list of project related issues.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Issue'
+  /v4/projects/{id}/milestones/{iid}/merge_requests:
+    get:
+      tags:
+        - Project
+      operationId: getAllMergeRequestsOfProjectMilestone
+      summary: Gets all merge requests assigned to a single project milestone.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the milestone of the project
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+      responses:
+        '200':
+          description: A list of milestone related merge requests.
+          content:
+            application/json:
+              schema:
+                ype: array
+                items:
+                  $ref: '#/components/schemas/MergeRequest'
+
+  # GROUPS
+  /v4/groups:
+    get:
+      tags:
+        - Group
+      operationId: getGroups
+      summary: Returns a list of all groups.
+      parameters:
+        - name: skip_groups
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+          description: Skip the group IDs passed
+        - name: all_available
+          in: query
+          schema:
+            type: boolean
+          description: >
+            Show all the groups you have access to (defaults to `false` for authenticated users, 
+            `true` for administrators); Attributes owned and `min_access_level` have precedence
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Return the list of authorized groups matching the search criteria
+        - name: order_by
+          in: query
+          schema:
+            $ref: '#/components/schemas/OrderGroupBy'
+          description: >
+            Order groups by `name`, `path`, `id`, or `similarity` (if searching, introduced in GitLab 14.1). Default is `name`
+        - name: sort
+          in: query
+          schema:
+            $ref: '#/components/schemas/SortingOrder'
+          description: Order groups in `asc` or `desc` order. Default is `asc`
+        - name: statistics
+          in: query
+          schema:
+            type: boolean
+          description: Include group statistics (administrators only)
+        - name: with_custom_attributes
+          in: query
+          schema:
+            type: boolean
+          description: Include custom attributes in response (administrators only)
+        - name: owned
+          in: query
+          schema:
+            type: boolean
+          description: Limit to groups explicitly owned by the current user
+        - name: min_access_level
+          in: query
+          schema:
+            type: integer
+          description: Limit to groups where current user has at least this role (`access_level`)
+        - name: top_level_only
+          in: query
+          schema:
+            type: boolean
+          description: Limit to top level groups, excluding all subgroups
+
+      responses:
+        '200':
+          description: A list of all groups.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+
+    post:
+      tags:
+        - Group
+      operationId: createNewGroup
+      summary: Create a new group
+      parameters:
+
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: The name of the group.
+          required: true
+
+        - name: path
+          in: query
+          schema:
+            type: string
+          description: The path of the group.
+          required: true
+
+        - name: auto_devops_enabled
+          in: query
+          schema:
+            type: boolean
+          description: Default to Auto DevOps pipeline for all projects within this group.
+        # # - avatar:
+        # #   in: query
+        # #   schema:
+        # #     type:
+        # #   description:
+        - name: default_branch_protection
+          in: query
+          schema:
+            type: integer
+          description: >
+            See Options for default_branch_protection. Default to the global level default 
+            branch protection setting.
+        - name: description
+          in: query
+          schema:
+            type: string
+          description: The group description.
+        - name: emails_disabled
+          in: query
+          schema:
+            type: boolean
+          description: Disable email notifications.
+        - name: lfs_enabled
+          in: query
+          schema:
+            type: boolean
+          description: Enable/disable Large File Storage (LFS) for the projects in this group.
+        - name: mentions_disabled
+          in: query
+          schema:
+            type: boolean
+          description: Disable the capability of a group from getting mentioned.
+        - name: parent_id
+          in: query
+          schema:
+            type: integer
+          description: The parent group ID for creating nested group.
+        - name: project_creation_level
+          in: query
+          schema:
+            $ref: '#/components/schemas/ProjectCreationLevel'
+          description: >
+            Determine if developers can create projects in the group. 
+            Can be noone (No one), maintainer (users with the Maintainer role), or developer (users with the Developer or Maintainer role).
+        - name: request_access_enabled
+          in: query
+          schema:
+            type: boolean
+          description: Allow users to request member access.
+        - name: require_two_factor_authentication
+          in: query
+          schema:
+            type: boolean
+          description: Require all users in this group to setup Two-factor authentication.
+        - name: share_with_group_lock
+          in: query
+          schema:
+            type: boolean
+          description: Prevent sharing a project with another group within this group.
+        - name: subgroup_creation_level
+          in: query
+          schema:
+            $ref: '#/components/schemas/SubGroupCreationLevel'
+          description: Allowed to create subgroups. Can be owner (Owners), or maintainer (users with the Maintainer role).
+        - name: two_factor_grace_period
+          in: query
+          schema:
+            type: integer
+          description: Time before Two-factor authentication is enforced (in hours).
+        - name: visibility
+          in: query
+          schema:
+            $ref: '#/components/schemas/Visibility'
+          description: The group’s visibility. Can be `private`, `internal`, or `public`.
+        - name: membership_lock
+          in: query
+          schema:
+            type: boolean
+          description: Users cannot be added to projects in this group.
+        - name: extra_shared_runners_minutes_limit
+          in: query
+          schema:
+            type: integer
+          description: Can be set by administrators only. Additional CI/CD minutes for this group.
+        - name: shared_runners_minutes_limit
+          in: query
+          schema:
+            type: integer
+          description: >
+            Can be set by administrators only. Maximum number of monthly CI/CD minutes for this 
+            group. Can be `nil` (default; inherit system default), `0` (unlimited), or `> 0`.
+
+      requestBody:
+        description: Details of the group to create.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Issue'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Conflict'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /v4/groups/{id}/labels:
+    get:
+      tags:
+        - Group
+      operationId: getGroupLabels
+      summary: Returns a list of group related labels.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the group owned by the authenticated user.
+        - name: page
+          in: query
+          schema:
+            type: integer
+          description: Returned issues are paginated and this argument specified the (1-based) page number.
+        - name: with_counts
+          in: query
+          schema:
+            type: boolean
+          description: Whether or not to include issue and merge request counts. Defaults to false.
+        - name: include_ancestor_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include ancestor groups. Defaults to true.
+        - name: include_descendant_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include descendant groups. Defaults to false. Introduced in GitLab 13.6
+        - name: only_group_labels
+          in: query
+          schema:
+            type: boolean
+          description: Toggle to include only group labels or also project labels. Defaults to true. Introduced in GitLab 13.6
+        - name: search
+          in: query
+          schema:
+            type: boolean
+          description: Keyword to filter labels by.
+
+      responses:
+        '200':
+          description: A list of all labels for a given group.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+
+    post:
+      tags:
+        - Group
+      operationId: createNewGroupLabel
+      summary: Create a new group label
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The name of the label
+        - name: color
+          in: query
+          required: true
+          schema:
+            type: string
+          description: >
+            The color of the label given in 6-digit hex notation with leading ‘#’ sign (for example, #FFAABB) or one of the CSS color names
+        - name: description
+          in: query
+          schema:
+            type: string
+          description: The description of the label.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /v4/groups/{id}/labels/{iid}:
+    get:
+      tags:
+        - Group
+      operationId: getGroupLabel
+      summary: Returns a specific group label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related label.
+        - name: include_ancestor_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include ancestor groups. Defaults to true.
+        - name: include_descendant_groups
+          in: query
+          schema:
+            type: boolean
+          description: Include descendant groups. Defaults to false. Introduced in GitLab 13.6
+        - name: only_group_labels
+          in: query
+          schema:
+            type: boolean
+          description: Toggle to include only group labels or also project labels. Defaults to true. Introduced in GitLab 13.6
+      responses:
+        '200':
+          description: A specific project label.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Group
+      operationId: updateGroupLabel
+      summary: Edits an existing group label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+
+      requestBody:
+        description: Details of the issue to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditLabel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+    delete:
+      tags:
+        - Group
+      operationId: deleteGroupLabel
+      summary: Deletes an existing label.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The ID of the related issue.
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/groups/{id}/labels/{iid}/subscribe:
+    post:
+      tags:
+        - Group
+      operationId: subscribeToGroupLabel
+      summary: >
+        Subscribes the authenticated user to a label to receive notifications. 
+        If the user is already subscribed to the label, the status code `304` is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the group owned by the authenticated user
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or title of a group label.
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already subscribed to the label.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v4/groups/{id}/labels/{iid}/unsubscribe:
+    post:
+      tags:
+        - Group
+      operationId: unsubscribeFromGroupLabel
+      summary: >
+        Subscribes the authenticated user to a group label to receive notifications. 
+        If the user is already subscribed to the label, the status code `304` is returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the group owned by the authenticated user
+        - name: iid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or title of a group label
+
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Label'
+        '304':
+          description: >
+            Not Modified <br>
+            Returned if the user is already unsubscribed from the label.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  
+components:
+  schemas:
+    AutoDevopsDeployStrategy:
+      type: string
+      enum:
+        - continuous
+        - manual
+        - timed_incremental
+    Counts:
+      type: object
+      properties:
+        all:
+          type: integer
+        closed:
+          type: integer
+        opened:
+          type: integer
+    BuildGitStrategy:
+      type: string
+      enum:
+        - clone
+        - fetch
+    Cadence:
+      type: string
+      enum:
+        - 1d
+        - 7d
+        - 14d
+        - 1month
+        - 3month
+    DefaultBranchProtection:
+      type: string
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+    DueDate:
+      type: string
+      enum:
+        - 0
+        - overdue
+        - week
+        - month
+        - next_month_and_previous_two_weeks
+    EditIssue:
+      type: object
+      properties:
+        add_labels:
+          type: array
+          items:
+            type: string
+        assignee_ids:
+          type: array
+          items:
+            type: integer
+        confidential:
+          type: boolean
+        description:
+          type: string
+        discussion_locked:
+          type: boolean
+        due_date:
+          type: string
+          format: date-time
+        epic_id:
+          type: integer
+        epic_iid:
+          type: integer
+        issue_type:
+          $ref: '#/components/schemas/IssueType'
+        labels:
+          type: array
+          items:
+            type: string
+        milestone_id:
+          type: integer
+        remove_labels:
+          type: array
+          items:
+            type: string
+        state_event:
+          type: string
+        title:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+        weight:
+          type: integer
+    EditLabel:
+      type: object
+      properties:
+        new_name:
+          type: string
+          description: Required if `color` is not provided!
+        color:
+          type: string
+          description: Required if `new_name` is not provided!
+        description:
+          type: string
+        priority:
+          type: integer
+          nullable: true
+    ExpirationPolicy:
+      type: object
+      properties:
+        cadence:
+          $ref: '#/components/schemas/Cadence'
+        enabled:
+          type: boolean
+        keep_n:
+          description: Keep n tags per image name
+          type: integer
+        older_than:
+          $ref: '#/components/schemas/OlderThan'
+        name_regex:
+          type: string
+        name_regex_keep:
+          type: string
+          nullable: true
+        next_run_at:
+          type: string
+          format: date-time
+    Enablement:
+      type: string
+      enum:
+        - enabled
+        - disabled
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+        web_url:
+          type: string
+          format: uri
+        name:
+          type: string
+        path:
+          type: string
+        description:
+          type: string
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        share_with_group_lock:
+          type: boolean
+        require_two_factor_authentication:
+          type: boolean
+        two_factor_grace_period:
+          type: integer
+        project_creation_level:
+          $ref: '#/components/schemas/ProjectCreationLevel'
+        auto_devops_enabled:
+          type: boolean
+        subgroup_creation_level:
+          $ref: '#/components/schemas/SubGroupCreationLevel'
+        emails_disabled:
+          type: boolean
+          nullable: true
+        mentions_disabled:
+          type: boolean
+          nullable: true
+        lfs_enabled:
+          type: boolean
+        default_branch_protection:
+          $ref: '#/components/schemas/DueDate'
+        avatar_url:
+          type: string
+          nullable: true
+        request_access_enabled:
+          type: boolean
+        full_name:
+          type: string
+        full_path:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        parent_id:
+          type: integer
+          nullable: true
+        ldap_cn:
+          type: string
+        ldap_access:
+          type: boolean
+          nullable: true
+      required:
+        - name
+        - path
+    Issue:
+      type: object
+      properties:
+        id:
+          type: integer
+        iid:
+          type: integer
+        project_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        state:
+          $ref: '#/components/schemas/State'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        closed_at:
+          type: string
+          format: date-time
+          nullable: true
+        closed_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+        labels:
+          type: array
+          items:
+            type: string
+        milestone:
+          $ref: '#/components/schemas/Milestone'
+          nullable: true
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        author:
+          $ref: '#/components/schemas/User'
+        type:
+          type: string
+        user_notes_count:
+          type: integer
+          minimum: 0
+        merge_requests_count:
+          type: integer
+          minimum: 0
+        upvotes:
+          type: integer
+          minimum: 0
+        downvotes:
+          type: integer
+          minimum: 0
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+        confidential:
+          type: boolean
+        discussion_locked:
+          type: boolean
+          nullable: true
+        issue_type:
+          type: string
+        web_url:
+          type: string
+          format: uri
+        time_stats:
+          $ref: '#/components/schemas/TimeStats'
+        task_completion_status:
+          $ref: '#/components/schemas/TaskCompletionStatus'
+        blocking_issues_count:
+          type: integer
+          minimum: 0
+        has_tasks:
+          type: boolean
+        _links:
+          $ref: '#/components/schemas/Links'
+        references:
+          $ref: '#/components/schemas/References'
+        subscribed:
+          type: boolean
+        moved_to_id:
+          type: integer
+          nullable: true
+        service_desk_reply_to:
+          type: string
+          format: email
+          nullable: true
+    ImporterStatus:
+      type: string
+      enum:
+        - none
+        - finished
+        - scheduled
+        - started
+        - failed
+    IssueType:
+      type: string
+      enum:
+        - issue
+        - incident
+        - test_case
+    Label:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        color:
+          type: string
+        description:
+          type: string
+        description_html:
+          type: string
+        text_color:
+          type: string
+        subscribed:
+          type: boolean
+        priority:
+          type: integer
+          nullable: true
+        is_project_label:
+          type: boolean
+    MergeMethod:
+      type: string
+      enum:
+        - merge
+        - rebase_merge
+        - ff
+    MergeStatus:
+      type: string
+      enum:
+        - unchecked
+        - checking
+        - can_be_merged
+        - cannot_be_merged
+        - cannot_be_merged_recheck
+    MilestoneState:
+      type: string
+      enum:
+        - active
+        - closed
+    Links:
+      type: object
+      properties:
+        self:
+          type: string
+          format: uri
+        notes:
+          type: string
+          format: uri
+        award_emoji:
+          type: string
+          format: uri
+        project:
+          type: string
+          format: uri
+    MemberAccess:
+      type: object
+      properties:
+        access_level:
+          type: integer
+        notification_level:
+          type: integer
+    MergeRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+        iid:
+          type: integer
+        project_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        state:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        merged_by:
+          $ref: '#/components/schemas/User'
+          nullable: true
+        merge_user:
+          $ref: '#/components/schemas/User'
+          nullable: true
+        merged_at:
+          type: string
+          format: date-time
+          nullable: true
+        closed_by:
+          type: string
+          format: date-time
+          nullable: true
+        closed_at:
+          type: string
+          format: date-time
+          nullable: true
+        target_branch:
+          type: string
+        source_branch:
+          type: string
+        user_notes_count:
+          type: integer
+        upvotes:
+          type: integer
+        downvotes:
+          type: integer
+        author:
+          $ref: '#/components/schemas/User'
+        assignees:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        assignee:
+          $ref: '#/components/schemas/User'
+          nullable: true
+        reviewers:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        source_project_id:
+          type: integer
+        target_project_id:
+          type: integer
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+        draft:
+          type: boolean
+        work_in_progress:
+          type: boolean
+        milestone:
+          $ref: '#/components/schemas/Milestone'
+        merge_when_pipeline_succeeds:
+          type: boolean
+        merge_status:
+          $ref: '#/components/schemas/MergeStatus'
+        sha:
+          type: string
+        merge_commit_sha:
+          type: string
+          nullable: true
+        squash_commit_sha:
+          type: string
+          nullable: true
+        discussion_locked:
+          type: boolean
+          nullable: true
+        should_remove_source_branch:
+          type: boolean
+          nullable: true
+        force_remove_source_branch:
+          type: boolean
+        reference:
+          type: string
+        references:
+          $ref: '#/components/schemas/References'
+        web_url:
+          type: string
+        time_stats:
+          $ref: '#/components/schemas/TimeStats'
+        squash:
+          type: boolean
+        task_completion_status:
+          $ref: '#/components/schemas/TaskCompletionStatus'
+        has_conflicts:
+          type: boolean
+        blocking_discussions_resolved:
+          type: boolean
+        approvals_before_merge:
+          type: integer
+          nullable: true
+    Milestone:
+      type: object
+      properties:
+        id:
+          type: integer
+        iid:
+          type: integer
+        project_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        state:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+        start_date:
+          type: string
+          format: date-time
+          nullable: true
+        expired:
+          type: boolean
+          nullable: true
+        web_url:
+          type: string
+          format: uri
+    Namespace:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        path:
+          type: string
+        kind:
+          type: string
+        full_path:
+          type: string
+        parent_id:
+          type: integer
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+        web_url:
+          type: string
+          format: uri
+    NewIssue:
+      type: object
+      properties:
+        assignee_ids:
+          type: array
+          items:
+            type: integer
+        confidential:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        description:
+          type: string
+        discussion_to_resolve:
+          type: string
+        due_date:
+          type: string
+          format: date-time
+        epic_id:
+          type: integer
+        epic_iid:
+          type: integer
+        iid:
+          type: integer
+        issue_type:
+          $ref: '#/components/schemas/IssueType'
+        labels:
+          type: array
+          items:
+            type: string
+        merge_request_to_resolve_discussions_of:
+          type: integer
+        milestone_id:
+          type: integer
+        title:
+          type: string
+        weight:
+          type: integer
+      required:
+        - title
+    Permissions:
+      type: object
+      properties:
+        project_access:
+          $ref: '#/components/schemas/MemberAccess'
+        group_access:
+          $ref: '#/components/schemas/MemberAccess'
+          nullable: true
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        name:
+          type: string
+        name_with_namespace:
+          type: string
+        path:
+          type: string
+        path_with_namespace:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        default_branch:
+          type: string
+        tag_list:
+          type: array
+          items:
+            type: string
+          description: <b>DEPRECATED:</b> The `tag_list` attribute has been deprecated and is removed in API v5 in favor of the topics attribute.
+        topics:
+          type: array
+          items:
+            type: string
+        ssh_url_to_repo:
+          type: string
+          format: uri
+        http_url_to_repo:
+          type: string
+          format: uri
+        web_url:
+          type: string
+          format: uri
+        readme_url:
+          type: string
+          format: uri
+        avatar_url:
+          type: string
+          format: uri
+        forks_count:
+          type: integer
+        star_count:
+          type: integer
+        last_activity_at:
+          type: string
+          format: date-time
+        namespace:
+          $ref: '#/components/schemas/Namespace'
+        container_registry_image_prefix:
+          type: string
+        _links:
+          $ref: '#/components/schemas/Links'
+        packages_enabled:
+          type: boolean
+        empty_repo:
+          type: boolean
+        archived:
+          type: boolean
+        visibility:
+          $ref: '#/components/schemas/Visibility'
+        owner:
+          $ref: '#/components/schemas/User'
+        resolve_outdated_diff_discussions:
+          type: boolean
+        container_expiration_policy:
+          $ref: '#/components/schemas/ExpirationPolicy'
+        issues_enabled:
+          type: boolean
+        merge_requests_enabled:
+          type: boolean
+        wiki_enabled:
+          type: boolean
+        jobs_enabled:
+          type: boolean
+        snippets_enabled:
+          type: boolean
+        container_registry_enabled:
+          type: boolean
+        service_desk_enabled:
+          type: boolean
+        service_desk_address:
+          type: string
+          format: email
+        can_create_merge_request_in:
+          type: boolean
+        issues_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        repository_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        merge_requests_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        forking_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        wiki_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        builds_access_level:
+          type: string
+        snippets_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        pages_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        operations_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        analytics_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        container_registry_access_level:
+          type: string
+          # TODO: 20210822 CJ: Clarify which values are possible here!
+        emails_disabled:
+          type: boolean
+          nullable: true
+        shared_runners_enabled:
+          type: boolean
+        lfs_enabled:
+          type: boolean
+        creator_id:
+          type: integer
+        import_status:
+          $ref: '#/components/schemas/ImporterStatus'
+        import_error:
+          type: string
+          nullable: true
+        open_issues_count:
+          type: integer
+        runners_token:
+          type: string
+        ci_default_git_depth:
+          type: integer
+        ci_forward_deployment_enabled:
+          type: boolean
+        ci_job_token_scope_enabled:
+          type: boolean
+        public_jobs:
+          type: boolean
+        build_git_strategy:
+          $ref: '#/components/schemas/BuildGitStrategy'
+        build_timeout:
+          type: integer
+        auto_cancel_pending_pipelines:
+          $ref: '#/components/schemas/Enablement'
+        build_coverage_regex:
+          type: string
+          nullable: true
+        ci_config_path:
+          type: string
+        shared_with_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/SharedGroupWithProject'
+        only_allow_merge_if_pipeline_succeeds:
+          type: boolean
+        allow_merge_on_skipped_pipeline:
+          type: boolean
+          nullable: true
+        restrict_user_defined_variables:
+          type: boolean
+        request_access_enabled:
+          type: boolean
+        only_allow_merge_if_all_discussions_are_resolved:
+          type: boolean
+        remove_source_branch_after_merge:
+          type: boolean
+        printing_merge_request_link_enabled:
+          type: boolean
+        merge_method:
+          $ref: '#/components/schemas/MergeMethod'
+        squash_option:
+          $ref: '#/components/schemas/SquashOption'
+        suggestion_commit_message:
+          type: string
+          nullable: true
+        auto_devops_enabled:
+          type: boolean
+        auto_devops_deploy_strategy:
+          $ref: '#/components/schemas/AutoDevopsDeployStrategy'
+        autoclose_referenced_issues:
+          type: boolean
+        keep_latest_artifact:
+          type: boolean
+        external_authorization_classification_label:
+          type: string
+        requirements_enabled:
+          type: boolean
+        security_and_compliance_enabled:
+          type: boolean
+        compliance_frameworks:
+          type: array
+          items:
+            type: string
+        permissions:
+          $ref: '#/components/schemas/Permissions'
+    References:
+      type: object
+      properties:
+        short:
+          type: string
+        relative:
+          type: string
+        full:
+          type: string
+    OlderThan:
+      type: string
+      enum:
+        - 7d
+        - 14d
+        - 30d
+        - 90d
+    OrderGroupBy:
+      type: string
+      enum:
+        - name
+        - path
+        - id
+        - similarity
+    ProjectCreationLevel:
+      type: string
+      enum:
+        - none
+        - maintainer
+        - developer
+    Scope:
+      type: string
+      enum:
+        - created_by_me
+        - assigned_to_me
+        - all
+    SharedGroupWithProject:
+      type: object
+      properties:
+        group_id:
+          type: integer
+        group_name:
+          type: string
+        group_full_path:
+          type: string
+        group_access_level:
+          type: integer
+        expires_at:
+          type: string
+          format: date-time
+          nullable: true
+    SquashOption:
+      type: string
+      enum:
+        - never
+        - always
+        - default_on
+        - default_off
+    State:
+      type: string
+      enum:
+        - all
+        - opened
+        - closed
+    Statistics:
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/Counts'
+    SubGroupCreationLevel:
+      type: string
+      enum:
+        - maintainer
+        - owner
+    TaskCompletionStatus:
+      type: object
+      properties:
+        count:
+          type: integer
+          minimum: 0
+        completed_count:
+          type: integer
+          minimum: 0
+    TimeStats:
+      type: object
+      properties:
+        time_estimate:
+          type: integer
+          minimum: 0
+        total_time_spent:
+          type: integer
+          minimum: 0
+        human_time_estimate:
+          type: string
+          nullable: true
+        human_total_time_spent:
+          type: string
+          nullable: true
+    User:
+      type: object
+      properties:
+        state:
+          type: string
+        web_url:
+          type: string
+          format: uri
+        avatar_url:
+          type: string
+          nullable: true
+        username:
+          type: string
+        id:
+          type: integer
+        name:
+          type: string
+    Visibility:
+      type: string
+      enum:
+        - private
+        - internal
+        - public
+    OrderBy:
+      type: string
+      enum:
+        - created_at
+        - updated_at
+        - priority
+        - due_date
+        - relative_position
+        - label_priority
+        - milestone_due
+        - popularity
+        - weight
+    SortingOrder:
+      type: string
+      enum:
+        - asc
+        - desc
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    UnProcessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  error:
+                    type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
