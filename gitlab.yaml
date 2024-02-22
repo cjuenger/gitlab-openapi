@@ -1221,6 +1221,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Milestone'
+
   /v4/projects/{id}/milestones/{iid}:
     get:
       tags:
@@ -1320,6 +1321,7 @@ paths:
       responses:
         '204':
           description: No Content
+
   /v4/projects/{id}/milestones/{iid}/issues:
     get:
       tags:
@@ -1353,6 +1355,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Issue'
+
   /v4/projects/{id}/milestones/{iid}/merge_requests:
     get:
       tags:
@@ -1386,6 +1389,47 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MergeRequest'
+
+  /v4/projects/{id}/iterations:
+    get:
+      tags:
+        - Project
+        - Iteration
+      operationId: getIterations
+      summary: Returns a list of project iterations.
+      parameters:
+        - name: state
+          in: query
+          schema: 
+            $ref: '#/components/schemas/State'
+        - name: search
+          in: query
+          schema: 
+            type: string
+        - name: in
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: include_ancestors
+          in: query
+          schema:
+            type: boolean
+        - name: include_descendants
+          in: query
+          schema:
+            type: boolean
+        - name: updated_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: updated_after
+          in: query
+          schema:
+            type: string
+            format: date-time
 
   # GROUPS
   /v4/groups:
@@ -2793,6 +2837,37 @@ components:
       enum:
         - asc
         - desc
+    Iteration:
+      type: object
+      properties:
+        id:
+          type: integer
+        iid:
+          type: integer
+        group_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/State'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        web_url:
+          type: string
+          format: uri        
+
   responses:
     BadRequest:
       description: Bad Request
