@@ -1453,6 +1453,17 @@ paths:
             Return only iterations updated after the given datetime. 
             Expected in ISO 8601 format (`2019-03-15T08:00:00Z`). 
             Introduced in GitLab 15.10.
+      responses:
+        '200':
+          description: A list of project iterations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Iteration'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   # GROUPS
   /v4/groups:
