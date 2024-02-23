@@ -1221,6 +1221,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Milestone'
+
   /v4/projects/{id}/milestones/{iid}:
     get:
       tags:
@@ -1320,6 +1321,7 @@ paths:
       responses:
         '204':
           description: No Content
+
   /v4/projects/{id}/milestones/{iid}/issues:
     get:
       tags:
@@ -1353,6 +1355,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Issue'
+
   /v4/projects/{id}/milestones/{iid}/merge_requests:
     get:
       tags:
@@ -1386,6 +1389,81 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MergeRequest'
+
+  /v4/projects/{id}/iterations:
+    get:
+      tags:
+        - Project
+        - Iteration
+      operationId: getIterations
+      summary: Returns a list of project iterations.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: state
+          in: query
+          schema: 
+            $ref: '#/components/schemas/IterationState'
+          description: ‘Return opened, upcoming, current, closed, or all iterations.’
+        - name: search
+          in: query
+          schema: 
+            type: string
+          description: Return only iterations with a title matching the provided string.
+        - name: in
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: > 
+            Fields in which fuzzy search should be performed with the query given in the argument search. 
+            The available options are `title` and `cadence_title`. Default is `[title]`. Introduced in GitLab 16.2.
+        - name: include_ancestors
+          in: query
+          schema:
+            type: boolean
+          description: Include iterations for parent group and its ancestors. Defaults to `true`.
+        - name: include_descendants
+          in: query
+          schema:
+            type: boolean
+          description: > 
+            Include iterations for parent group and its descendants. 
+            Defaults to `false`. Introduced in GitLab 16.7.
+        - name: updated_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: > 
+            Return only iterations updated before the given datetime. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`). 
+            Introduced in GitLab 15.10.
+        - name: updated_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: >
+            Return only iterations updated after the given datetime. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`). 
+            Introduced in GitLab 15.10.
+      responses:
+        '200':
+          description: A list of project iterations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Iteration'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   # GROUPS
   /v4/groups:
@@ -2793,6 +2871,45 @@ components:
       enum:
         - asc
         - desc
+    Iteration:
+      type: object
+      properties:
+        id:
+          type: integer
+        iid:
+          type: integer
+        group_id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        state:
+          $ref: '#/components/schemas/IterationState'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+        start_date:
+          type: string
+          format: date-time
+        web_url:
+          type: string
+          format: uri
+    IterationState:
+      type: string
+      enum:
+        - opened
+        - upcoming
+        - current
+        - closed
+        - all
+
   responses:
     BadRequest:
       description: Bad Request
