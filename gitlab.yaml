@@ -1395,7 +1395,7 @@ paths:
       tags:
         - Project
         - Iteration
-      operationId: getIterations
+      operationId: getProjectIterations
       summary: Returns a list of project iterations.
       parameters:
         - name: id
@@ -1944,6 +1944,81 @@ paths:
           description: >
             Not Modified <br>
             Returned if the user is already unsubscribed from the label.
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /v4/groups/{id}/iterations:
+    get:
+      tags:
+        - Group
+        - Iteration
+      operationId: getGroupIterations
+      summary: Returns a list of group iterations.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the group owned by the authenticated user
+        - name: state
+          in: query
+          schema: 
+            $ref: '#/components/schemas/IterationState'
+          description: ‘Return opened, upcoming, current, closed, or all iterations.’
+        - name: search
+          in: query
+          schema: 
+            type: string
+          description: Return only iterations with a title matching the provided string.
+        - name: in
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          description: > 
+            Fields in which fuzzy search should be performed with the query given in the argument search. 
+            The available options are `title` and `cadence_title`. Default is `[title]`. Introduced in GitLab 16.2.
+        - name: include_ancestors
+          in: query
+          schema:
+            type: boolean
+          description: Include iterations for parent group and its ancestors. Defaults to `true`.
+        - name: include_descendants
+          in: query
+          schema:
+            type: boolean
+          description: > 
+            Include iterations for parent group and its descendants. 
+            Defaults to `false`. Introduced in GitLab 16.7.
+        - name: updated_before
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: > 
+            Return only iterations updated before the given datetime. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`). 
+            Introduced in GitLab 15.10.
+        - name: updated_after
+          in: query
+          schema:
+            type: string
+            format: date-time
+          description: >
+            Return only iterations updated after the given datetime. 
+            Expected in ISO 8601 format (`2019-03-15T08:00:00Z`). 
+            Introduced in GitLab 15.10.
+      responses:
+        '200':
+          description: A list of project iterations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Iteration'
         '404':
           $ref: '#/components/responses/NotFound'
   
