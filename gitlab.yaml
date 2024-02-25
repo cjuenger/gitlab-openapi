@@ -716,6 +716,7 @@ paths:
             Returned if the a to-do item already exsists for this issue, for the user user.
         '404':
           $ref: '#/components/responses/NotFound'
+
   /v4/projects/{id}/issues/{iid}/time_stats:
     get:
       tags:
@@ -746,6 +747,63 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  /v4/projects/{id}/issues/{issueId}/links:
+    get:
+      tags:
+        - Project
+        - Issues
+      operationId: getProjectIssuesLinks
+      summary: >
+        Get a list of a given issue’s linked issues, sorted by the relationship creation datetime (ascending). 
+        Issues are filtered according to the user authorizations.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The internal ID of a project’s issue
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IssueRelation"
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /v4/projects/{id}/issues/{issueId}/links/{issueLinkId}:
+    get:
+      tags:
+        - Project
+        - Issues
+      operationId: getProjectIssueLinks
+      summary: > 
+        Get a list of a given issue’s linked issues, sorted by the relationship creation datetime (ascending). 
+        Issues are filtered according to the user authorizations.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: string
+          description: The ID or URL-encoded path of the project owned by the authenticated user.
+        - name: issueId
+          in: path
+          required: true
+          schema: 
+            type: string
+          description: The internal ID of a project’s issue
+        
   /v4/projects/{id}/issues_statistics:
     get:
       tags:
@@ -866,6 +924,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Statistics'
+
   /v4/projects/{id}/labels/{iid}:
     get:
       tags:
@@ -959,6 +1018,7 @@ paths:
           description: No Content
         '404':
           $ref: '#/components/responses/NotFound'
+
   /v4/projects/{id}/labels/{iid}/subscribe:
     post:
       tags:
@@ -2212,7 +2272,8 @@ components:
       required:
         - name
         - path
-    Issue:
+
+    IssueBase:
       type: object
       properties:
         id:
@@ -2295,8 +2356,6 @@ components:
           $ref: '#/components/schemas/Links'
         references:
           $ref: '#/components/schemas/References'
-        subscribed:
-          type: boolean
         moved_to_id:
           type: integer
           nullable: true
@@ -2304,6 +2363,40 @@ components:
           type: string
           format: email
           nullable: true
+
+    Issue:
+      allOf: 
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:        
+            subscribed:
+              type: boolean
+
+    IssueRelation:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            issue_link_id: 
+              type: string
+            link_type: 
+              $ref: '#/components/schemas/LinkType'
+            link_created_at: 
+              type: string
+              format: date-time
+            link_updated_at: 
+              type: string
+              format: date-time
+
+    IssueLink:
+
+    LinkType:
+      type: string
+      enum:
+        - relates_to 
+        - blocks 
+        - is_blocked_by
+
     ImporterStatus:
       type: string
       enum:
@@ -2312,12 +2405,14 @@ components:
         - scheduled
         - started
         - failed
+
     IssueType:
       type: string
       enum:
         - issue
         - incident
         - test_case
+
     Label:
       type: object
       properties:
@@ -2340,12 +2435,14 @@ components:
           nullable: true
         is_project_label:
           type: boolean
+
     MergeMethod:
       type: string
       enum:
         - merge
         - rebase_merge
         - ff
+
     MergeStatus:
       type: string
       enum:
@@ -2354,6 +2451,7 @@ components:
         - can_be_merged
         - cannot_be_merged
         - cannot_be_merged_recheck
+
     MilestoneState:
       type: string
       enum:
