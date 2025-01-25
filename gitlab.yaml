@@ -191,7 +191,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Project'
-
+  
+  ## PROJECTS ISSUES
   /v4/projects/{id}/issues:
     get:
       tags:
@@ -866,6 +867,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Statistics'
+  
+  ## PROJECTS LABELS
   /v4/projects/{id}/labels/{iid}:
     get:
       tags:
@@ -994,7 +997,6 @@ paths:
             Returned if the user is already subscribed to the label.
         '404':
           $ref: '#/components/responses/NotFound'
-
   /v4/projects/{id}/labels/{iid}/unsubscribe:
     post:
       tags:
@@ -1124,6 +1126,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '409':
           $ref: '#/components/responses/Conflict'
+  
+  ## PROJECTS MILESTONES
   /v4/projects/{id}/milestones:
     get:
       tags:
@@ -1221,7 +1225,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Milestone'
-
   /v4/projects/{id}/milestones/{iid}:
     get:
       tags:
@@ -1321,7 +1324,6 @@ paths:
       responses:
         '204':
           description: No Content
-
   /v4/projects/{id}/milestones/{iid}/issues:
     get:
       tags:
@@ -1355,7 +1357,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Issue'
-
   /v4/projects/{id}/milestones/{iid}/merge_requests:
     get:
       tags:
@@ -1390,6 +1391,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/MergeRequest'
 
+  ## PROJECTS ITERATIONS
   /v4/projects/{id}/iterations:
     get:
       tags:
@@ -1676,6 +1678,8 @@ paths:
           $ref: '#/components/responses/Conflict'
         '409':
           $ref: '#/components/responses/Conflict'
+  
+  ## GROUPS LABELS
   /v4/groups/{id}/labels:
     get:
       tags:
@@ -1772,7 +1776,6 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '409':
           $ref: '#/components/responses/Conflict'
-
   /v4/groups/{id}/labels/{iid}:
     get:
       tags:
@@ -1947,6 +1950,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
+  ## GROUPS ITERATIONS
   /v4/groups/{id}/iterations:
     get:
       tags:
@@ -2022,6 +2026,21 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
   
+  # MERGE REQUESTS
+  /v4/merge_requests:
+    get:
+      tags:
+        - Standalone
+      operationId: getMergeRequests
+      summar: Get all merge requests the authenticated user has access to.
+      parameters:
+        - name: 
+          in: query
+          schema:
+            type: array
+            items: integer
+          description: Returns the merge requests approved by all the users with the given id, up to 5 users.
+
 components:
   schemas:
     AutoDevopsDeployStrategy:
